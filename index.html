@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html lang="hu" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neked, Nyuszi ❤️</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Cormorant Garamond (elegáns címek) és Plus Jakarta Sans (letisztult szöveg) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Three.js a 360°-os interaktív csillagkupolához -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        serif: ['"Cormorant Garamond"', 'serif'],
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        rose: {
+                            50: '#fff1f2',
+                            100: '#ffe4e6',
+                            200: '#fecdd3',
+                            300: '#fda4af',
+                            400: '#fb7185',
+                            500: '#f43f5e',
+                            600: '#e11d48',
+                            700: '#be123c',
+                            800: '#9f1239',
+                            900: '#881337',
+                        },
+                        cream: '#fdfbf9',
+                        blush: '#f9f1f0',
+                        sage: '#84a59d',
+                    },
+                    boxShadow: {
+                        'soft': '0 10px 40px -10px rgba(225, 29, 72, 0.08)',
+                        'glow': '0 0 25px rgba(251, 113, 133, 0.25)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #fdfbf9;
+            background-image: 
+                radial-gradient(at 15% 15%, rgba(254, 205, 211, 0.35) 0px, transparent 50%),
+                radial-gradient(at 85% 40%, rgba(253, 230, 138, 0.2) 0px, transparent 50%),
+                radial-gradient(at 20% 85%, rgba(251, 113, 133, 0.15) 0px, transparent 50%);
+            background-attachment: fixed;
+            color: #3f3335;
+            overflow-x: hidden;
+        }
+
+        /* Lebegő szirmok animációja */
+        .petal {
+            position: fixed;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.45;
+            animation: floatDown linear infinite;
+        }
+
+        @keyframes floatDown {
+            0% {
+                transform: translateY(-10vh) translateX(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.5;
+            }
+            90% {
+                opacity: 0.5;
+            }
+            100% {
+                transform: translateY(110vh) translateX(40px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Virágcsokor lágy ringatózása */
+        @keyframes sway {
+            0%, 100% { transform: rotate(-1.5deg) translateY(0px); }
+            50% { transform: rotate(1.5deg) translateY(-4px); }
+        }
+        .bouquet-sway {
+            animation: sway 5s ease-in-out infinite;
+            transform-origin: bottom center;
+        }
+
+        @keyframes bloom {
+            0% { transform: scale(0.92); opacity: 0.8; }
+            50% { transform: scale(1.03); opacity: 1; }
+            100% { transform: scale(0.92); opacity: 0.8; }
+        }
+        .flower-pulse {
+            animation: bloom 4s ease-in-out infinite;
+            transform-origin: center;
+        }
+
+        /* Glassmorphism kártyák */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.78);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(254, 205, 211, 0.5);
+        }
+
+        /* 360 Planetárium kurzor */
+        .sky-viewer-canvas {
+            cursor: grab;
+            touch-action: none;
+        }
+        .sky-viewer-canvas:active {
+            cursor: grabbing;
+        }
+    </style>
+</head>
+<body class="font-sans antialiased selection:bg-rose-200 selection:text-rose-900 relative min-h-screen flex flex-col justify-between">
+
+    <!-- Lebegő háttér emojik és szirmok konténer -->
+    <div id="petals-container" class="fixed inset-0 pointer-events-none overflow-hidden z-0"></div>
+
+    <!-- Felső navigáció -->
+    <header class="sticky top-4 z-30 mx-auto w-[92%] max-w-3xl mt-4">
+        <nav class="glass-card rounded-full px-5 py-3 shadow-soft flex items-center justify-between">
+            <a href="#top" class="flex items-center gap-2 text-rose-800 font-serif font-semibold text-xl tracking-wide">
+                <span class="text-xl">🐰🩷</span>
+                <span>Nyuszi</span>
+                <span class="text-base"></span>
+            </a>
+            <div class="flex items-center gap-2.5 sm:gap-5 text-xs sm:text-sm font-medium text-stone-600">
+                <a href="#talalkozo" class="hover:text-rose-600 transition-colors py-1">Találkozó</a>
+                <a href="#csillagok" class="hover:text-rose-600 transition-colors py-1">Csillagok ✨</a>
+                <a href="#csokor" class="hover:text-rose-600 transition-colors py-1">Virágcsokor</a>
+                <a href="#zene" class="hover:text-rose-600 transition-colors py-1">Spotify</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Fő tartalom -->
+    <main id="top" class="relative z-10 max-w-3xl w-[92%] mx-auto pt-8 pb-20 space-y-12 sm:space-y-16">
+
+        <!-- 1. HERO / KÖSZÖNTŐ SZEKCIÓ (Letisztult, csak a kért szövegekkel) -->
+        <section class="text-center pt-6 pb-2">
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-rose-100/80 border border-rose-200 text-rose-700 text-sm font-medium mb-5 shadow-sm">
+                <span>🦉</span>
+                <span>🩷</span>
+                <span>🤭</span>
+                <span>😍</span>
+            </div>
+
+            <h1 class="font-serif text-5xl sm:text-6xl md:text-7xl font-semibold text-stone-800 tracking-tight leading-tight mb-4">
+                Szia <span class="text-rose-600 italic font-normal">Nyuszi!</span> 🩷
+            </h1>
+
+            <p class="font-serif text-2xl sm:text-3xl text-rose-700 font-medium tracking-wide mb-8 flex items-center justify-center gap-2 flex-wrap">
+                <span>Szeretleek, nagyon sok nagyon</span>
+                <span>😍🤭🩷</span>
+            </p>
+
+            <!-- Mackós idézet kártya -->
+            <div class="glass-card rounded-3xl p-6 sm:p-8 shadow-soft max-w-lg mx-auto relative overflow-hidden">
+                <div class="absolute -top-6 -right-6 w-24 h-24 bg-rose-100 rounded-full opacity-50 pointer-events-none"></div>
+                <div class="text-2xl mb-2 flex items-center justify-center gap-2">
+                    <span></span>
+                    <span>🩷</span>
+                </div>
+                <p class="font-serif italic text-2xl sm:text-3xl text-stone-800 leading-relaxed">
+                    „Az ölelés mindig megfelelő méretű.” 🧸
+                </p>
+            </div>
+        </section>
+
+        <!-- 2. VISSZASZÁMLÁLÓ SZEKCIÓ -->
+        <section id="talalkozo" class="scroll-mt-24">
+            <div class="glass-card rounded-3xl p-6 sm:p-10 shadow-soft relative overflow-hidden">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 border-b border-rose-100/80 pb-5">
+                    <div>
+                        <span class="text-xs uppercase tracking-widest text-rose-500 font-semibold block mb-1">Már csak ennyi van hátra 🤭🩷</span>
+                        <h2 class="font-serif text-3xl sm:text-4xl font-semibold text-stone-800">Következő találkozásunkig 😍</h2>
+                    </div>
+                    <button onclick="toggleDateEditor()" class="self-start sm:self-auto inline-flex items-center gap-2 px-4 py-2 rounded-full bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200/80 text-xs sm:text-sm font-medium transition-all shadow-sm active:scale-95">
+                        <i data-lucide="calendar-clock" class="w-4 h-4"></i>
+                        <span>Dátum frissítése</span>
+                    </button>
+                </div>
+
+                <!-- Visszaszámláló számok -->
+                <div id="countdown-grid" class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-5 text-center my-2">
+                    <div class="bg-white/90 border border-rose-100 rounded-2xl p-4 sm:p-6 shadow-sm flex flex-col justify-center">
+                        <span id="cd-days" class="font-serif text-4xl sm:text-5xl font-bold text-rose-600 tabular-nums">00</span>
+                        <span class="text-xs sm:text-sm text-stone-500 mt-1 font-medium uppercase tracking-wider">Nap</span>
+                    </div>
+                    <div class="bg-white/90 border border-rose-100 rounded-2xl p-4 sm:p-6 shadow-sm flex flex-col justify-center">
+                        <span id="cd-hours" class="font-serif text-4xl sm:text-5xl font-bold text-rose-600 tabular-nums">00</span>
+                        <span class="text-xs sm:text-sm text-stone-500 mt-1 font-medium uppercase tracking-wider">Óra</span>
+                    </div>
+                    <div class="bg-white/90 border border-rose-100 rounded-2xl p-4 sm:p-6 shadow-sm flex flex-col justify-center">
+                        <span id="cd-minutes" class="font-serif text-4xl sm:text-5xl font-bold text-rose-600 tabular-nums">00</span>
+                        <span class="text-xs sm:text-sm text-stone-500 mt-1 font-medium uppercase tracking-wider">Perc</span>
+                    </div>
+                    <div class="bg-white/90 border border-rose-100 rounded-2xl p-4 sm:p-6 shadow-sm flex flex-col justify-center">
+                        <span id="cd-seconds" class="font-serif text-4xl sm:text-5xl font-bold text-rose-500 tabular-nums">00</span>
+                        <span class="text-xs sm:text-sm text-stone-500 mt-1 font-medium uppercase tracking-wider">Másodperc</span>
+                    </div>
+                </div>
+
+                <!-- Üzenet, ha elérkezett a találkozó ideje -->
+                <div id="meeting-arrived" class="hidden text-center py-6 bg-rose-50/90 rounded-2xl border border-rose-200 my-2">
+                    <div class="text-3xl mb-2">😍🩷🤭</div>
+                    <h3 class="font-serif text-2xl font-semibold text-rose-800">Végre elérkezett a pillanat!</h3>
+                    <p class="text-sm text-rose-600 mt-1">Itt az ideje, hogy újra együtt legyünk, Nyuszi!</p>
+                </div>
+
+                <!-- Aktuálisan beállított időpont kijelzése -->
+                <div class="mt-6 flex flex-wrap items-center justify-between gap-2 text-xs sm:text-sm text-stone-500">
+                    <div class="flex items-center gap-2">
+                        <i data-lucide="clock" class="w-4 h-4 text-rose-400"></i>
+                        <span>Kitűzött időpont: <strong id="target-date-display" class="text-stone-700 font-medium">Betöltés...</strong></span>
+                    </div>
+                    <span id="meeting-note-display" class="italic text-rose-600 font-serif text-base"></span>
+                </div>
+
+                <!-- Dátum szerkesztő panel (alapból rejtett) -->
+                <div id="date-editor" class="hidden mt-6 pt-6 border-t border-rose-100 bg-rose-50/50 -mx-6 -mb-6 sm:-mx-10 sm:-mb-10 p-6 sm:p-8 rounded-b-3xl">
+                    <h4 class="font-medium text-stone-800 text-sm mb-4 flex items-center gap-2">
+                        <i data-lucide="calendar-heart" class="w-4 h-4 text-rose-500"></i>
+                        <span>Mikor találkozunk legközelebb? 🩷</span>
+                    </h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label for="meeting-datetime" class="block text-xs text-stone-600 mb-1.5 font-medium">Dátum és pontos idő</label>
+                            <input type="datetime-local" id="meeting-datetime" class="w-full px-3.5 py-2.5 rounded-xl border border-rose-200 bg-white text-stone-800 text-sm focus:outline-none focus:ring-2 focus:ring-rose-400">
+                        </div>
+                        <div>
+                            <label for="meeting-title" class="block text-xs text-stone-600 mb-1.5 font-medium">Rövid megjegyzés (opcionális)</label>
+                            <input type="text" id="meeting-title" placeholder="Pl. Ölelés 🧸🩷" class="w-full px-3.5 py-2.5 rounded-xl border border-rose-200 bg-white text-stone-800 text-sm focus:outline-none focus:ring-2 focus:ring-rose-400">
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap items-center justify-end gap-2 mt-4">
+                        <button onclick="setQuickDate(1)" class="text-xs px-3 py-1.5 rounded-lg bg-white border border-stone-200 text-stone-600 hover:bg-stone-50 transition">Holnap</button>
+                        <button onclick="setQuickDate(3)" class="text-xs px-3 py-1.5 rounded-lg bg-white border border-stone-200 text-stone-600 hover:bg-stone-50 transition">+3 nap</button>
+                        <button onclick="setQuickDate(7)" class="text-xs px-3 py-1.5 rounded-lg bg-white border border-stone-200 text-stone-600 hover:bg-stone-50 transition">+1 hét</button>
+                        <button onclick="saveMeetingDate()" class="ml-auto inline-flex items-center gap-1.5 px-5 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs sm:text-sm font-medium transition shadow-sm">
+                            <i data-lucide="check" class="w-4 h-4"></i>
+                            <span>Mentés</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. 360° CSILLAGTÉRKÉP (THE SKY THE NIGHT WE MET) SZEKCIÓ -->
+        <section id="csillagok" class="scroll-mt-24">
+            <div class="glass-card rounded-3xl p-6 sm:p-10 shadow-soft">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+                    <div>
+                        <span class="text-xs uppercase tracking-widest text-rose-500 font-semibold block mb-1">2024.05.06 · Velence, Hungary ✨</span>
+                        <h2 class="font-serif text-3xl sm:text-4xl font-semibold text-stone-800">The sky the night we met 🩷😍</h2>
+                    </div>
+
+                    <!-- Nézet váltó: 360° Kupola vs Eredeti Kép -->
+                    <div class="inline-flex rounded-full p-1 bg-rose-100/70 border border-rose-200 self-start sm:self-auto">
+                        <button id="tab-sky-360" onclick="switchSkyMode('360')" class="px-3.5 py-1.5 rounded-full text-xs font-medium transition-all bg-white text-rose-700 shadow-sm flex items-center gap-1.5">
+                            <i data-lucide="compass" class="w-3.5 h-3.5"></i>
+                            <span>360° Égbolt</span>
+                        </button>
+                        <button id="tab-sky-poster" onclick="switchSkyMode('poster')" class="px-3.5 py-1.5 rounded-full text-xs font-medium transition-all text-stone-600 hover:text-rose-700 flex items-center gap-1.5">
+                            <i data-lucide="image" class="w-3.5 h-3.5"></i>
+                            <span>Eredeti kép</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 3/A: 360°-os Interaktív Csillagkupola (Planetárium) -->
+                <div id="sky-360-wrapper" class="space-y-4">
+                    <div class="relative w-full h-[420px] sm:h-[500px] rounded-2xl overflow-hidden border border-rose-200/80 bg-[#050814] shadow-inner select-none">
+                        <!-- Three.js 360 vászon konténer -->
+                        <div id="sky-360-container" class="w-full h-full sky-viewer-canvas"></div>
+
+                        <!-- Felső lebegő iránytű és cím jelvény -->
+                        <div class="absolute top-4 left-4 right-4 flex items-center justify-between pointer-events-none">
+                            <div class="bg-black/50 backdrop-blur-md border border-white/15 text-white px-3.5 py-1.5 rounded-full text-xs flex items-center gap-2">
+                                <span class="w-2 h-2 rounded-full bg-rose-400 animate-pulse"></span>
+                                <span>360° Planetárium · Húzd körbe az égboltot! 🦉</span>
+                            </div>
+                            <div id="compass-heading" class="bg-black/50 backdrop-blur-md border border-white/15 text-rose-200 font-serif px-3.5 py-1.5 rounded-full text-xs sm:text-sm font-medium">
+                                Irány: Észak (N)
+                            </div>
+                        </div>
+
+                        <!-- Alsó vezérlőgombok és felirat a 360 nézeten -->
+                        <div class="absolute bottom-4 left-4 right-4 flex flex-col sm:flex-row items-center justify-between gap-3 pointer-events-none">
+                            <div class="bg-black/55 backdrop-blur-md border border-white/10 text-white/90 px-4 py-2 rounded-2xl text-center sm:text-left">
+                                <p class="font-serif italic text-base sm:text-lg text-rose-200 leading-tight">— The sky the night we met —</p>
+                                <p class="text-[11px] text-stone-300 tracking-wider uppercase mt-0.5">Velence, Hungary · 47.24177° N · 18.64790° E · 2024.05.06</p>
+                            </div>
+                            <div class="flex items-center gap-2 pointer-events-auto">
+                                <button onclick="toggleSkyAutoRotate()" id="btn-autorotate" class="px-3.5 py-2 rounded-xl bg-white/15 hover:bg-white/25 backdrop-blur-md border border-white/20 text-white text-xs font-medium transition flex items-center gap-1.5">
+                                    <i data-lucide="rotate-cw" class="w-3.5 h-3.5"></i>
+                                    <span id="autorotate-label">Forgás: Be</span>
+                                </button>
+                                <button onclick="resetSkyCamera()" class="px-3.5 py-2 rounded-xl bg-white/15 hover:bg-white/25 backdrop-blur-md border border-white/20 text-white text-xs font-medium transition flex items-center gap-1.5" title="Alaphelyzet">
+                                    <i data-lucide="focus" class="w-3.5 h-3.5"></i>
+                                    <span>Középre</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3/B: Eredeti Poszter Nézet (Interaktív 3D döntéssel és forgatással) -->
+                <div id="sky-poster-wrapper" class="hidden">
+                    <div class="flex flex-col items-center justify-center bg-[#f4f1ea] rounded-2xl p-4 sm:p-8 border border-rose-200/80 shadow-inner">
+                        <div id="poster-tilt-card" class="relative max-w-md w-full rounded-2xl overflow-hidden shadow-xl transition-transform duration-200 ease-out cursor-grab active:cursor-grabbing bg-[#f4f1ea]">
+                            <img 
+                                id="star-poster-img"
+                                src="IMG_6979.jpg" 
+                                alt="The sky the night we met - Velence, Hungary - 2024.05.06" 
+                                class="w-full h-auto block select-none"
+                                onerror="this.style.display='none'; document.getElementById('poster-fallback-canvas-wrap').classList.remove('hidden');">
+                            <!-- Fallback ha a lokális kép más néven töltődne be: kirajzoljuk a posztert nagy felbontásban -->
+                            <div id="poster-fallback-canvas-wrap" class="hidden w-full">
+                                <canvas id="poster-fallback-canvas" width="900" height="1000" class="w-full h-auto block"></canvas>
+                            </div>
+                        </div>
+                        <div class="mt-4 flex items-center gap-3 text-xs text-stone-500">
+                            <span>🦉 Mozgasd az egeret vagy forgasd a csillagtérképet! 🩷😍</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. DIGITÁLIS VIRÁGCSOKOR SZEKCIÓ -->
+        <section id="csokor" class="scroll-mt-24">
+            <div class="glass-card rounded-3xl p-6 sm:p-10 shadow-soft">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+                    <div>
+                        <span class="text-xs uppercase tracking-widest text-rose-500 font-semibold block mb-1">Örökké virágzik 🩷🤭</span>
+                        <h2 class="font-serif text-3xl sm:text-4xl font-semibold text-stone-800">Egy csokor virág Neked 🌸😍</h2>
+                    </div>
+
+                    <!-- Nézet váltó gombok (DigiBouquet beágyazás vs. Rajzolt csokor) -->
+                    <div class="inline-flex rounded-full p-1 bg-rose-100/70 border border-rose-200 self-start sm:self-auto">
+                        <button id="tab-embed" onclick="switchBouquetTab('embed')" class="px-3.5 py-1.5 rounded-full text-xs font-medium transition-all bg-white text-rose-700 shadow-sm">
+                            DigiBouquet nézet
+                        </button>
+                        <button id="tab-svg" onclick="switchBouquetTab('svg')" class="px-3.5 py-1.5 rounded-full text-xs font-medium transition-all text-stone-600 hover:text-rose-700">
+                            Rajzolt csokor
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 4/A: Beágyazott DigiBouquet Iframe nézet -->
+                <div id="bouquet-embed-view" class="space-y-4">
+                    <div class="relative w-full h-[460px] sm:h-[520px] rounded-2xl overflow-hidden border border-rose-200/80 bg-[#faf6f0] shadow-inner">
+                        <iframe 
+                            src="https://digibouquet.vercel.app/bouquet/e245ac27-5058-4150-bc63-700c38978b18" 
+                            title="Nyuszi Virágcsokra - DigiBouquet"
+                            class="w-full h-full border-0"
+                            loading="lazy">
+                        </iframe>
+                    </div>
+                </div>
+
+                <!-- 4/B: Egyedi interaktív SVG virágcsokor -->
+                <div id="bouquet-svg-view" class="hidden">
+                    <div class="w-full py-8 px-4 rounded-2xl bg-gradient-to-b from-rose-50/70 via-white to-rose-50/40 border border-rose-100 flex flex-col items-center justify-center relative overflow-hidden">
+                        <svg viewBox="0 0 400 380" class="w-64 sm:w-80 h-auto bouquet-sway drop-shadow-md cursor-pointer" onclick="triggerPetalShower()">
+                            <path d="M110,190 L200,340 L290,190 Q200,165 110,190 Z" fill="#f3e5d8" stroke="#e2cbb5" stroke-width="2"/>
+                            <g stroke="#5f7d6b" stroke-width="3" fill="none" stroke-linecap="round">
+                                <path d="M200,260 Q150,160 120,100" />
+                                <path d="M200,260 Q250,160 280,100" />
+                                <path d="M200,260 L200,75" />
+                                <path d="M200,260 Q170,170 155,120" />
+                                <path d="M200,260 Q230,170 245,120" />
+                            </g>
+                            <g fill="#84a59d" opacity="0.85">
+                                <ellipse cx="125" cy="115" rx="14" ry="8" transform="rotate(-35 125 115)" />
+                                <ellipse cx="145" cy="135" rx="15" ry="9" transform="rotate(-25 145 135)" />
+                                <ellipse cx="275" cy="115" rx="14" ry="8" transform="rotate(35 275 115)" />
+                                <ellipse cx="255" cy="135" rx="15" ry="9" transform="rotate(25 255 135)" />
+                                <ellipse cx="170" cy="95" rx="12" ry="7" transform="rotate(-15 170 95)" />
+                                <ellipse cx="230" cy="95" rx="12" ry="7" transform="rotate(15 230 95)" />
+                            </g>
+                            <g class="flower-pulse" style="animation-delay: 0.3s">
+                                <circle cx="140" cy="145" r="32" fill="#fda4af" />
+                                <circle cx="132" cy="138" r="22" fill="#fb7185" />
+                                <circle cx="145" cy="148" r="20" fill="#fecdd3" />
+                                <circle cx="138" cy="143" r="10" fill="#e11d48" opacity="0.5" />
+                            </g>
+                            <g class="flower-pulse" style="animation-delay: 1.1s">
+                                <circle cx="260" cy="145" r="30" fill="#fecdd3" />
+                                <circle cx="266" cy="140" r="22" fill="#fda4af" />
+                                <circle cx="254" cy="150" r="18" fill="#ffe4e6" />
+                                <circle cx="260" cy="145" r="9" fill="#fb7185" />
+                            </g>
+                            <g class="flower-pulse" style="animation-delay: 0.7s">
+                                <circle cx="172" cy="105" r="24" fill="#fde68a" />
+                                <circle cx="172" cy="105" r="16" fill="#fef3c7" />
+                                <circle cx="172" cy="105" r="7" fill="#f59e0b" />
+                            </g>
+                            <g class="flower-pulse" style="animation-delay: 1.5s">
+                                <circle cx="228" cy="105" r="24" fill="#fed7aa" />
+                                <circle cx="228" cy="105" r="16" fill="#ffedd5" />
+                                <circle cx="228" cy="105" r="7" fill="#fb923c" />
+                            </g>
+                            <g class="flower-pulse">
+                                <circle cx="200" cy="135" r="38" fill="#f43f5e" />
+                                <circle cx="194" cy="129" r="28" fill="#fb7185" />
+                                <circle cx="207" cy="138" r="24" fill="#fda4af" />
+                                <circle cx="200" cy="134" r="14" fill="#ffe4e6" />
+                                <circle cx="200" cy="134" r="7" fill="#e11d48" />
+                            </g>
+                            <g fill="#ffffff" stroke="#fecdd3" stroke-width="1">
+                                <circle cx="115" cy="165" r="5" />
+                                <circle cx="125" cy="175" r="4" />
+                                <circle cx="285" cy="165" r="5" />
+                                <circle cx="275" cy="175" r="4" />
+                                <circle cx="200" cy="80" r="5" />
+                                <circle cx="190" cy="72" r="4" />
+                                <circle cx="210" cy="72" r="4" />
+                                <circle cx="165" cy="170" r="5" />
+                                <circle cx="235" cy="170" r="5" />
+                            </g>
+                            <path d="M120,185 L200,345 L280,185 Q240,210 200,195 Q160,210 120,185 Z" fill="#faedcd" stroke="#e5d0b1" stroke-width="2"/>
+                            <rect x="178" y="258" width="44" height="12" rx="6" fill="#e11d48" />
+                            <path d="M200,264 C170,240 160,275 195,268" fill="#f43f5e" stroke="#be123c" stroke-width="1.5"/>
+                            <path d="M200,264 C230,240 240,275 205,268" fill="#f43f5e" stroke="#be123c" stroke-width="1.5"/>
+                            <path d="M195,268 L180,310" stroke="#e11d48" stroke-width="5" stroke-linecap="round"/>
+                            <path d="M205,268 L220,310" stroke="#e11d48" stroke-width="5" stroke-linecap="round"/>
+                            <circle cx="200" cy="264" r="6" fill="#be123c" />
+                        </svg>
+                        <p class="text-xs text-rose-500 mt-3 font-medium">✨ Kattints a csokorra! 🩷🤭</p>
+                    </div>
+                </div>
+
+                <!-- Közvetlen gomb a DigiBouquet megnyitásához -->
+                <div class="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4 bg-rose-50/70 rounded-2xl p-4 border border-rose-100">
+                    <div class="flex items-center gap-3 text-center sm:text-left">
+                        <div class="w-10 h-10 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center shrink-0 mx-auto sm:mx-0">
+                            <i data-lucide="flower-2" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium text-stone-800">A saját DigiBouquet csokrod 🩷</p>
+                            <p class="text-xs text-stone-500">Teljes képernyős megnyitás </p>
+                        </div>
+                    </div>
+                    <a href="https://digibouquet.vercel.app/bouquet/e245ac27-5058-4150-bc63-700c38978b18" 
+                       target="_blank" 
+                       rel="noopener noreferrer"
+                       class="w-full sm:w-auto text-center inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full bg-rose-600 hover:bg-rose-700 text-white text-xs sm:text-sm font-medium transition shadow-sm">
+                        <span>Csokor megnyitása</span>
+                        <i data-lucide="external-link" class="w-4 h-4"></i>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. KÖZÖS SPOTIFY LEJÁTSZÁSI LISTA SZEKCIÓ (Bevezető szöveg nélkül!) -->
+        <section id="zene" class="scroll-mt-24">
+            <div class="glass-card rounded-3xl p-6 sm:p-10 shadow-soft">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-5">
+                    <div class="flex items-center gap-2.5">
+                        <h2 class="font-serif text-3xl sm:text-4xl font-semibold text-stone-800">Közös Spotify 🎶</h2>
+                        <span class="text-xl">🩷🤭😍</span>
+                    </div>
+                    <a href="https://open.spotify.com/playlist/5jvA0gqT0R6DeDULktlBwF?si=zBhA7y2JQOG6I4VAXPFV3w&utm_source=sms&pi=R5M65RGVQ6289" 
+                       target="_blank" 
+                       rel="noopener noreferrer"
+                       class="self-start sm:self-auto inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#1DB954]/10 hover:bg-[#1DB954]/20 text-[#15883e] border border-[#1DB954]/30 text-xs sm:text-sm font-medium transition">
+                        <i data-lucide="music" class="w-4 h-4"></i>
+                        <span>Megnyitás Spotify-on</span>
+                    </a>
+                </div>
+
+                <!-- Hivatalos Spotify Beágyazott Lejátszó (bevezető szöveg nélkül) -->
+                <div class="rounded-2xl overflow-hidden shadow-md border border-rose-100 bg-stone-900">
+                    <iframe 
+                        style="border-radius:16px" 
+                        src="https://open.spotify.com/embed/playlist/5jvA0gqT0R6DeDULktlBwF?utm_source=generator" 
+                        width="100%" 
+                        height="380" 
+                        frameBorder="0" 
+                        allowfullscreen="" 
+                        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
+                        loading="lazy">
+                    </iframe>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Lábléc -->
+    <footer class="relative z-10 text-center py-8 text-xs sm:text-sm text-stone-400 border-t border-rose-100/60 bg-white/40 backdrop-blur-sm">
+        <p class="font-serif italic text-lg text-stone-700 mb-1">Nyuszinak 🩷🤭😍</p>
+    </footer>
+
+    <!-- Visszajelző üzenet (Toast) -->
+    <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
+        <div class="bg-stone-800 text-white px-4 py-3 rounded-2xl shadow-lg flex items-center gap-2.5 text-xs sm:text-sm">
+            <span>🩷</span>
+            <span id="toast-message">Időpont elmentve!</span>
+        </div>
+    </div>
+
+    <script>
+        // Lucide ikonok inicializálása
+        lucide.createIcons();
+
+        // --- 1. VISSZASZÁMLÁLÓ LOGIKA ÉS DÁTUM SZERKESZTŐ ---
+        const STORAGE_DATE_KEY = 'nyuszi_next_meeting_date_20261030';
+        const STORAGE_NOTE_KEY = 'nyuszi_next_meeting_note_20261030';
+
+        function getDefaultTargetDate() {
+            // Alapértelmezett találkozó: 2026.10.30. 14:00
+            return new Date(2026, 9, 30, 14, 0, 0, 0);
+        }
+
+        let targetDate = localStorage.getItem(STORAGE_DATE_KEY)
+            ? new Date(localStorage.getItem(STORAGE_DATE_KEY))
+            : getDefaultTargetDate();
+
+        let meetingNote = localStorage.getItem(STORAGE_NOTE_KEY) || "Következő ölelés 🧸🩷";
+
+        function formatDateTimeForInput(date) {
+            const pad = (n) => String(n).padStart(2, '0');
+            return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
+        }
+
+        function formatHungarianDate(date) {
+            return date.toLocaleDateString('hu-HU', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                weekday: 'long',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        function updateCountdownDisplay() {
+            const now = new Date();
+            const diff = targetDate - now;
+
+            const gridEl = document.getElementById('countdown-grid');
+            const arrivedEl = document.getElementById('meeting-arrived');
+
+            document.getElementById('target-date-display').textContent = formatHungarianDate(targetDate);
+            document.getElementById('meeting-note-display').textContent = meetingNote ? `„${meetingNote}”` : '';
+
+            if (diff <= 0) {
+                gridEl.classList.add('hidden');
+                arrivedEl.classList.remove('hidden');
+                return;
+            }
+
+            gridEl.classList.remove('hidden');
+            arrivedEl.classList.add('hidden');
+
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+            const minutes = Math.floor((diff / 1000 / 60) % 60);
+            const seconds = Math.floor((diff / 1000) % 60);
+
+            document.getElementById('cd-days').textContent = String(days).padStart(2, '0');
+            document.getElementById('cd-hours').textContent = String(hours).padStart(2, '0');
+            document.getElementById('cd-minutes').textContent = String(minutes).padStart(2, '0');
+            document.getElementById('cd-seconds').textContent = String(seconds).padStart(2, '0');
+        }
+
+        function toggleDateEditor() {
+            const editor = document.getElementById('date-editor');
+            const isHidden = editor.classList.contains('hidden');
+            if (isHidden) {
+                document.getElementById('meeting-datetime').value = formatDateTimeForInput(targetDate);
+                document.getElementById('meeting-title').value = meetingNote;
+                editor.classList.remove('hidden');
+            } else {
+                editor.classList.add('hidden');
+            }
+        }
+
+        function setQuickDate(daysToAdd) {
+            const d = new Date();
+            d.setDate(d.getDate() + daysToAdd);
+            d.setHours(18, 0, 0, 0);
+            document.getElementById('meeting-datetime').value = formatDateTimeForInput(d);
+        }
+
+        function saveMeetingDate() {
+            const inputVal = document.getElementById('meeting-datetime').value;
+            const noteVal = document.getElementById('meeting-title').value.trim();
+
+            if (!inputVal) {
+                showToast("Kérlek, válassz egy érvényes dátumot!");
+                return;
+            }
+
+            targetDate = new Date(inputVal);
+            meetingNote = noteVal;
+
+            localStorage.setItem(STORAGE_DATE_KEY, targetDate.toISOString());
+            localStorage.setItem(STORAGE_NOTE_KEY, meetingNote);
+
+            updateCountdownDisplay();
+            document.getElementById('date-editor').classList.add('hidden');
+            showToast("Találkozó időpontja frissítve! 🩷😍");
+        }
+
+        // --- 2. 360°-OS INTERAKTÍV CSILLAGKUPOLA (THREE.JS PLANETÁRIUM) ---
+        let scene, camera, renderer, skyGroup;
+        let isDraggingSky = false;
+        let prevMouse = { x: 0, y: 0 };
+        let lon = 0, lat = 25; // Kezdő nézőpont: Észak felé, enyhén felfelé a csillagokra
+        let fov = 68;
+        let autoRotateSky = true;
+
+        // Csillagképek adatai a 2024.05.06 Velence csillagtérképről (hogy a 360°-os kupolában tűélesen ragyogjanak)
+        const constellationsData = [
+            // Göncölszekér / Ursa Major
+            [[0.15, 0.72, -0.65], [0.22, 0.76, -0.60], [0.28, 0.74, -0.62], [0.35, 0.70, -0.60], [0.38, 0.62, -0.68], [0.48, 0.65, -0.58], [0.45, 0.73, -0.50], [0.35, 0.70, -0.60]],
+            // Cassiopeia
+            [[-0.25, 0.55, -0.78], [-0.18, 0.60, -0.76], [-0.12, 0.54, -0.82], [-0.05, 0.58, -0.79], [0.02, 0.52, -0.84]],
+            // Leo (Oroszlán)
+            [[0.45, 0.48, 0.75], [0.52, 0.55, 0.65], [0.62, 0.52, 0.58], [0.68, 0.42, 0.60], [0.55, 0.38, 0.74], [0.45, 0.48, 0.75], [0.42, 0.60, 0.68], [0.48, 0.66, 0.58]],
+            // Cygnus (Hattyú)
+            [[-0.65, 0.45, -0.60], [-0.55, 0.55, -0.62], [-0.45, 0.65, -0.60], [-0.55, 0.55, -0.62], [-0.68, 0.62, -0.50], [-0.42, 0.48, -0.72]],
+            // Bootes (Ökörhajcsár)
+            [[-0.10, 0.78, 0.60], [-0.02, 0.85, 0.52], [0.08, 0.82, 0.55], [0.05, 0.72, 0.68], [-0.05, 0.68, 0.72], [-0.10, 0.78, 0.60]],
+            // Virgo (Szűz)
+            [[-0.15, 0.38, 0.90], [-0.05, 0.45, 0.88], [0.06, 0.42, 0.90], [0.15, 0.50, 0.85], [0.06, 0.42, 0.90], [0.10, 0.30, 0.94]],
+            // Gemini (Ikrek)
+            [[0.75, 0.35, -0.55], [0.82, 0.42, -0.38], [0.78, 0.50, -0.36], [0.70, 0.44, -0.55], [0.75, 0.35, -0.55]],
+            // Scorpius / Dél-keleti horizont
+            [[-0.55, 0.25, 0.78], [-0.48, 0.32, 0.81], [-0.40, 0.30, 0.86], [-0.35, 0.22, 0.90], [-0.42, 0.16, 0.89]],
+            // Auriga (Szekeres)
+            [[0.55, 0.50, -0.66], [0.64, 0.58, -0.50], [0.72, 0.48, -0.49], [0.65, 0.38, -0.65], [0.55, 0.42, -0.72], [0.55, 0.50, -0.66]],
+            // Hercules
+            [[-0.45, 0.72, 0.52], [-0.35, 0.76, 0.54], [-0.32, 0.68, 0.65], [-0.42, 0.64, 0.64], [-0.45, 0.72, 0.52]]
+        ];
+
+        function createTextSprite(text, color = '#ffffff', fontSize = 54) {
+            const canvas = document.createElement('canvas');
+            canvas.width = 256;
+            canvas.height = 128;
+            const ctx = canvas.getContext('2d');
+            ctx.font = `600 ${fontSize}px "Cormorant Garamond", serif`;
+            ctx.fillStyle = color;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.shadowColor = 'rgba(244, 63, 94, 0.6)';
+            ctx.shadowBlur = 12;
+            ctx.fillText(text, 128, 64);
+
+            const texture = new THREE.CanvasTexture(canvas);
+            const material = new THREE.SpriteMaterial({ map: texture, transparent: true });
+            const sprite = new THREE.Sprite(material);
+            sprite.scale.set(16, 8, 1);
+            return sprite;
+        }
+
+        function initSky360() {
+            const container = document.getElementById('sky-360-container');
+            if (!container) return;
+
+            const width = container.clientWidth || 600;
+            const height = container.clientHeight || 460;
+
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(fov, width / height, 0.1, 1000);
+            camera.position.set(0, 0, 0.01);
+
+            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+            renderer.setSize(width, height);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            renderer.setClearColor(0x040711, 1);
+            container.innerHTML = '';
+            container.appendChild(renderer.domElement);
+
+            skyGroup = new THREE.Group();
+            scene.add(skyGroup);
+
+            // 1. Éjszakai égbolt kupola + a feltöltött IMG_6979.jpg csillagtérkép rávetítése a zenitre
+            const domeGeo = new THREE.SphereGeometry(90, 64, 48);
+            domeGeo.scale(-1, 1, 1); // Belső felület megjelenítése
+
+            // Alap mélykék/tejútrendszeres égbolt textúra generálása + a feltöltött kép ráolvasztása ha betölt
+            const skyCanvas = document.createElement('canvas');
+            skyCanvas.width = 1024;
+            skyCanvas.height = 512;
+            const sCtx = skyCanvas.getContext('2d');
+
+            const grad = sCtx.createLinearGradient(0, 0, 0, 512);
+            grad.addColorStop(0, '#040817');
+            grad.addColorStop(0.55, '#071026');
+            grad.addColorStop(0.85, '#0a1530');
+            grad.addColorStop(1, '#02040a');
+            sCtx.fillStyle = grad;
+            sCtx.fillRect(0, 0, 1024, 512);
+
+            // Tejút ködösség sáv
+            sCtx.save();
+            sCtx.translate(512, 200);
+            sCtx.rotate(-0.45);
+            const mwGrad = sCtx.createRadialGradient(0, 0, 10, 0, 0, 320);
+            mwGrad.addColorStop(0, 'rgba(140, 175, 255, 0.16)');
+            mwGrad.addColorStop(0.5, 'rgba(110, 145, 230, 0.07)');
+            mwGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+            sCtx.fillStyle = mwGrad;
+            sCtx.scale(2.2, 0.45);
+            sCtx.beginPath();
+            sCtx.arc(0, 0, 300, 0, Math.PI * 2);
+            sCtx.fill();
+            sCtx.restore();
+
+            // Fenyőfák sziluettje a horizonton (mint a poszter alján)
+            sCtx.fillStyle = '#020409';
+            sCtx.fillRect(0, 390, 1024, 122);
+            for (let x = 0; x < 1024; x += 14) {
+                const treeH = 18 + Math.sin(x * 0.3) * 8 + (x % 23);
+                sCtx.beginPath();
+                sCtx.moveTo(x, 395);
+                sCtx.lineTo(x + 7, 395 - treeH);
+                sCtx.lineTo(x + 14, 395);
+                sCtx.fill();
+            }
+
+            const domeTexture = new THREE.CanvasTexture(skyCanvas);
+            const domeMat = new THREE.MeshBasicMaterial({ map: domeTexture });
+            const domeMesh = new THREE.Mesh(domeGeo, domeMat);
+            skyGroup.add(domeMesh);
+
+            // 2. Eredeti IMG_6979.jpg csillagkör elhelyezése a kupola tetején (zenit), hogy felnézve az eredeti kép is látszódjon
+            const imgLoader = new Image();
+            imgLoader.crossOrigin = "anonymous";
+            imgLoader.onload = () => {
+                // Kör alakú kivágás az IMG_6979.jpg-ből a kupolára
+                const capCanvas = document.createElement('canvas');
+                capCanvas.width = 1024;
+                capCanvas.height = 1024;
+                const cCtx = capCanvas.getContext('2d');
+
+                // A poszteren a fekete csillagkör középen, kicsit feljebb helyezkedik el
+                const cx = imgLoader.width * 0.5;
+                const cy = imgLoader.height * 0.422;
+                const r = imgLoader.width * 0.375;
+
+                cCtx.save();
+                cCtx.beginPath();
+                cCtx.arc(512, 512, 490, 0, Math.PI * 2);
+                cCtx.closePath();
+                cCtx.clip();
+                cCtx.drawImage(imgLoader, cx - r, cy - r, r * 2, r * 2, 0, 0, 1024, 1024);
+                cCtx.restore();
+
+                // Lágy perem elmosás
+                const fadeGrad = cCtx.createRadialGradient(512, 512, 400, 512, 512, 500);
+                fadeGrad.addColorStop(0, 'rgba(0,0,0,0)');
+                fadeGrad.addColorStop(1, '#040817');
+                cCtx.fillStyle = fadeGrad;
+                cCtx.fillRect(0, 0, 1024, 1024);
+
+                const capTex = new THREE.CanvasTexture(capCanvas);
+                const capGeo = new THREE.SphereGeometry(88, 64, 32, 0, Math.PI * 2, 0, Math.PI * 0.58);
+                capGeo.scale(-1, 1, 1);
+                const capMat = new THREE.MeshBasicMaterial({ map: capTex, transparent: true, opacity: 0.92 });
+                const capMesh = new THREE.Mesh(capGeo, capMat);
+                skyGroup.add(capMesh);
+            };
+            imgLoader.src = 'IMG_6979.jpg';
+
+            // 3. 1800 db ragyogó 3D csillag a teljes 360°-os térben
+            const starCount = 1800;
+            const starPositions = new Float32Array(starCount * 3);
+            const starColors = new Float32Array(starCount * 3);
+
+            for (let i = 0; i < starCount; i++) {
+                const u = Math.random();
+                const v = Math.random();
+                const theta = u * 2.0 * Math.PI;
+                const phi = Math.acos(2.0 * v - 1.0);
+                const rad = 82;
+
+                const x = rad * Math.sin(phi) * Math.cos(theta);
+                const y = Math.abs(rad * Math.cos(phi)) - 8; // Horizont felett sűrűbb
+                const z = rad * Math.sin(phi) * Math.sin(theta);
+
+                starPositions[i * 3] = x;
+                starPositions[i * 3 + 1] = y;
+                starPositions[i * 3 + 2] = z;
+
+                // Csillagszínek: fehér, halvány arany, halvány rózsaszín/kék
+                const tint = Math.random();
+                if (tint > 0.88) {
+                    starColors[i * 3] = 1.0; starColors[i * 3 + 1] = 0.85; starColors[i * 3 + 2] = 0.65;
+                } else if (tint > 0.75) {
+                    starColors[i * 3] = 0.82; starColors[i * 3 + 1] = 0.90; starColors[i * 3 + 2] = 1.0;
+                } else {
+                    starColors[i * 3] = 1.0; starColors[i * 3 + 1] = 1.0; starColors[i * 3 + 2] = 1.0;
+                }
+            }
+
+            const starsGeo = new THREE.BufferGeometry();
+            starsGeo.setAttribute('position', new THREE.BufferAttribute(starPositions, 3));
+            starsGeo.setAttribute('color', new THREE.BufferAttribute(starColors, 3));
+            const starsMat = new THREE.PointsMaterial({ size: 0.75, vertexColors: true, transparent: true, opacity: 0.9 });
+            const starField = new THREE.Points(starsGeo, starsMat);
+            skyGroup.add(starField);
+
+            // 4. Csillagkép vonalak és csomópontok (mint a Velence 2024.05.06 térképen)
+            const lineMat = new THREE.LineBasicMaterial({ color: 0xdbeafe, transparent: true, opacity: 0.55 });
+            const brightStarGeo = new THREE.SphereGeometry(0.65, 12, 12);
+            const brightStarMat = new THREE.MeshBasicMaterial({ color: 0xfffbeb });
+
+            constellationsData.forEach(chain => {
+                const points = [];
+                chain.forEach(([nx, ny, nz]) => {
+                    const vec = new THREE.Vector3(nx, ny, nz).normalize().multiplyScalar(78);
+                    points.push(vec);
+
+                    const starDot = new THREE.Mesh(brightStarGeo, brightStarMat);
+                    starDot.position.copy(vec);
+                    skyGroup.add(starDot);
+                });
+                const lineGeo = new THREE.BufferGeometry().setFromPoints(points);
+                const line = new THREE.Line(lineGeo, lineMat);
+                skyGroup.add(line);
+            });
+
+            // 5. Égtájak (N, E, S, W) és Horizont gyűrű (ahogy a képen szerepel)
+            const horizonRingGeo = new THREE.RingGeometry(79.5, 80, 96);
+            horizonRingGeo.rotateX(Math.PI / 2);
+            const horizonRingMat = new THREE.MeshBasicMaterial({ color: 0xfda4af, side: THREE.DoubleSide, transparent: true, opacity: 0.3 });
+            const horizonRing = new THREE.Mesh(horizonRingGeo, horizonRingMat);
+            horizonRing.position.y = -2;
+            skyGroup.add(horizonRing);
+
+            const cardinals = [
+                { label: 'N', x: 0, z: -74, color: '#fda4af' },
+                { label: 'E', x: -74, z: 0, color: '#f8fafc' },
+                { label: 'S', x: 0, z: 74, color: '#f8fafc' },
+                { label: 'W', x: 74, z: 0, color: '#f8fafc' }
+            ];
+            cardinals.forEach(c => {
+                const sp = createTextSprite(c.label, c.color, 60);
+                sp.position.set(c.x, 4, c.z);
+                skyGroup.add(sp);
+            });
+
+            // Eseménykezelők egérhez és érintőképernyőhöz (360° körbeforgatás)
+            const domEl = renderer.domElement;
+
+            domEl.addEventListener('pointerdown', (e) => {
+                isDraggingSky = true;
+                autoRotateSky = false;
+                updateAutoRotateButton();
+                prevMouse.x = e.clientX;
+                prevMouse.y = e.clientY;
+            });
+
+            window.addEventListener('pointermove', (e) => {
+                if (!isDraggingSky) return;
+                const dx = e.clientX - prevMouse.x;
+                const dy = e.clientY - prevMouse.y;
+                prevMouse.x = e.clientX;
+                prevMouse.y = e.clientY;
+
+                lon -= dx * 0.22;
+                lat += dy * 0.22;
+                lat = Math.max(-15, Math.min(89, lat)); // Horizonttól egészen a zenitig (90 fok)
+                updateCompassHeading();
+            });
+
+            window.addEventListener('pointerup', () => {
+                isDraggingSky = false;
+            });
+
+            // Görgős nagyítás (zoom)
+            domEl.addEventListener('wheel', (e) => {
+                e.preventDefault();
+                fov = Math.max(35, Math.min(85, fov + e.deltaY * 0.04));
+                camera.fov = fov;
+                camera.updateProjectionMatrix();
+            }, { passive: false });
+
+            window.addEventListener('resize', () => {
+                if (!container || !renderer) return;
+                const w = container.clientWidth;
+                const h = container.clientHeight;
+                if (w > 0 && h > 0) {
+                    camera.aspect = w / h;
+                    camera.updateProjectionMatrix();
+                    renderer.setSize(w, h);
+                }
+            });
+
+            animateSky360();
+        }
+
+        function updateCompassHeading() {
+            const normLon = ((lon % 360) + 360) % 360;
+            let dir = 'Észak (N)';
+            if (normLon >= 315 || normLon < 45) dir = 'Észak (N)';
+            else if (normLon >= 45 && normLon < 135) dir = 'Nyugat (W)';
+            else if (normLon >= 135 && normLon < 225) dir = 'Dél (S)';
+            else dir = 'Kelet (E)';
+
+            const el = document.getElementById('compass-heading');
+            if (el) {
+                el.textContent = lat > 72 ? 'Zenit (Fejünk felett ✨)' : `Irány: ${dir}`;
+            }
+        }
+
+        function animateSky360() {
+            requestAnimationFrame(animateSky360);
+            if (!renderer || !scene || !camera) return;
+
+            if (autoRotateSky && !isDraggingSky) {
+                lon += 0.08;
+                updateCompassHeading();
+            }
+
+            const phi = THREE.MathUtils.degToRad(90 - lat);
+            const theta = THREE.MathUtils.degToRad(lon - 90);
+
+            const target = new THREE.Vector3(
+                500 * Math.sin(phi) * Math.cos(theta),
+                500 * Math.cos(phi),
+                500 * Math.sin(phi) * Math.sin(theta)
+            );
+            camera.lookAt(target);
+            renderer.render(scene, camera);
+        }
+
+        function toggleSkyAutoRotate() {
+            autoRotateSky = !autoRotateSky;
+            updateAutoRotateButton();
+        }
+
+        function updateAutoRotateButton() {
+            const label = document.getElementById('autorotate-label');
+            if (label) {
+                label.textContent = autoRotateSky ? 'Forgás: Be' : 'Forgás: Ki';
+            }
+        }
+
+        function resetSkyCamera() {
+            lon = 0;
+            lat = 65; // Felnézés a csillagtérkép közepére
+            fov = 68;
+            if (camera) {
+                camera.fov = fov;
+                camera.updateProjectionMatrix();
+            }
+            updateCompassHeading();
+        }
+
+        function switchSkyMode(mode) {
+            const w360 = document.getElementById('sky-360-wrapper');
+            const wPoster = document.getElementById('sky-poster-wrapper');
+            const b360 = document.getElementById('tab-sky-360');
+            const bPoster = document.getElementById('tab-sky-poster');
+
+            if (mode === '360') {
+                w360.classList.remove('hidden');
+                wPoster.classList.add('hidden');
+                b360.className = "px-3.5 py-1.5 rounded-full text-xs font-medium transition-all bg-white text-rose-700 shadow-sm flex items-center gap-1.5";
+                bPoster.className = "px-3.5 py-1.5 rounded-full text-xs font-medium transition-all text-stone-600 hover:text-rose-700 flex items-center gap-1.5";
+            } else {
+                w360.classList.add('hidden');
+                wPoster.classList.remove('hidden');
+                bPoster.className = "px-3.5 py-1.5 rounded-full text-xs font-medium transition-all bg-white text-rose-700 shadow-sm flex items-center gap-1.5";
+                b360.className = "px-3.5 py-1.5 rounded-full text-xs font-medium transition-all text-stone-600 hover:text-rose-700 flex items-center gap-1.5";
+            }
+        }
+
+        // Poszter 3D döntés effekt és fallback rajzolás
+        function initPosterTiltAndFallback() {
+            const card = document.getElementById('poster-tilt-card');
+            if (card) {
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = (e.clientX - rect.left) / rect.width - 0.5;
+                    const y = (e.clientY - rect.top) / rect.height - 0.5;
+                    card.style.transform = `perspective(900px) rotateY(${x * 16}deg) rotateX(${-y * 16}deg) scale(1.02)`;
+                });
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = 'perspective(900px) rotateY(0deg) rotateX(0deg) scale(1)';
+                });
+            }
+
+            // Fallback vászon, ha az IMG_6979.jpg nem töltődne be közvetlenül
+            const c = document.getElementById('poster-fallback-canvas');
+            if (!c) return;
+            const ctx = c.getContext('2d');
+            ctx.fillStyle = '#f3f0ea';
+            ctx.fillRect(0, 0, 900, 1000);
+
+            // Külső gyűrű és csillagkör
+            const cx = 450, cy = 420, r = 340;
+            ctx.beginPath();
+            ctx.arc(cx, cy, r + 6, 0, Math.PI * 2);
+            ctx.strokeStyle = '#1c1917';
+            ctx.lineWidth = 2.5;
+            ctx.stroke();
+
+            const radGrad = ctx.createRadialGradient(cx, cy, 20, cx, cy, r);
+            radGrad.addColorStop(0, '#091326');
+            radGrad.addColorStop(1, '#02050c');
+            ctx.fillStyle = radGrad;
+            ctx.beginPath();
+            ctx.arc(cx, cy, r, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Csillagok a poszteren
+            for (let i = 0; i < 450; i++) {
+                const a = Math.random() * Math.PI * 2;
+                const d = Math.sqrt(Math.random()) * (r - 8);
+                ctx.fillStyle = Math.random() > 0.85 ? '#fde68a' : '#ffffff';
+                ctx.beginPath();
+                ctx.arc(cx + Math.cos(a) * d, cy + Math.sin(a) * d, Math.random() * 1.8 + 0.4, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            // Égtájak (N, E, S, W)
+            ctx.fillStyle = '#1c1917';
+            ctx.font = '600 22px "Cormorant Garamond", serif';
+            ctx.textAlign = 'center';
+            ctx.fillText('N', cx, cy - r - 16);
+            ctx.fillText('S', cx, cy + r + 28);
+            ctx.fillText('E', cx - r - 22, cy + 7);
+            ctx.fillText('W', cx + r + 24, cy + 7);
+
+            // Felirat alul
+            ctx.font = 'italic 34px "Cormorant Garamond", serif';
+            ctx.fillText('— The sky the night we met —', cx, 855);
+            ctx.font = '400 20px "Cormorant Garamond", serif';
+            ctx.fillText('Velence, Hungary', cx, 890);
+            ctx.font = '400 16px "Plus Jakarta Sans", sans-serif';
+            ctx.fillStyle = '#44403c';
+            ctx.fillText('47.24177° N  ·  18.64790° E', cx, 920);
+            ctx.fillText('2024.05.06', cx, 946);
+            ctx.fillText('— ✦ —', cx, 976);
+        }
+
+        // --- 3. VIRÁGCSOKOR NÉZETVÁLTÓ ---
+        function switchBouquetTab(tab) {
+            const embedView = document.getElementById('bouquet-embed-view');
+            const svgView = document.getElementById('bouquet-svg-view');
+            const tabEmbed = document.getElementById('tab-embed');
+            const tabSvg = document.getElementById('tab-svg');
+
+            if (tab === 'embed') {
+                embedView.classList.remove('hidden');
+                svgView.classList.add('hidden');
+                tabEmbed.className = "px-3.5 py-1.5 rounded-full text-xs font-medium transition-all bg-white text-rose-700 shadow-sm";
+                tabSvg.className = "px-3.5 py-1.5 rounded-full text-xs font-medium transition-all text-stone-600 hover:text-rose-700";
+            } else {
+                embedView.classList.add('hidden');
+                svgView.classList.remove('hidden');
+                tabSvg.className = "px-3.5 py-1.5 rounded-full text-xs font-medium transition-all bg-white text-rose-700 shadow-sm";
+                tabEmbed.className = "px-3.5 py-1.5 rounded-full text-xs font-medium transition-all text-stone-600 hover:text-rose-700";
+            }
+        }
+
+        // --- 4. LEBEGŐ EMOJIK (🦉, 🤭, 🩷, 😍) ÉS VIRÁGSZIRMOK ---
+        function createFloatingPetals(count = 16) {
+            const container = document.getElementById('petals-container');
+            const symbols = ['🩷', '🦉', '🤭', '😍', '🌸', '🩷'];
+
+            for (let i = 0; i < count; i++) {
+                const petal = document.createElement('div');
+                petal.className = 'petal';
+                petal.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+                petal.style.left = `${Math.random() * 100}vw`;
+                petal.style.fontSize = `${Math.random() * 10 + 13}px`;
+                petal.style.animationDuration = `${Math.random() * 12 + 13}s`;
+                petal.style.animationDelay = `${Math.random() * 10}s`;
+                container.appendChild(petal);
+            }
+        }
+
+        function triggerPetalShower() {
+            createFloatingPetals(8);
+            showToast("Egy csokor ölelés Nyuszinak! 🩷😍");
+        }
+
+        // --- 5. TOAST ÉRTESÍTÉS ---
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-message').textContent = msg;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+
+        // Indítás betöltéskor
+        window.addEventListener('DOMContentLoaded', () => {
+            updateCountdownDisplay();
+            setInterval(updateCountdownDisplay, 1000);
+            createFloatingPetals(16);
+            initSky360();
+            initPosterTiltAndFallback();
+        });
+    </script>
+</body>
+</html>
