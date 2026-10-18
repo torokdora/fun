@@ -521,12 +521,12 @@
         lucide.createIcons();
 
         // --- 1. VISSZASZÁMLÁLÓ LOGIKA ÉS DÁTUM SZERKESZTŐ ---
-        const STORAGE_DATE_KEY = 'nyuszi_next_meeting_date_20261030';
-        const STORAGE_NOTE_KEY = 'nyuszi_next_meeting_note_20261030';
+        const STORAGE_DATE_KEY = 'nyuszi_next_meeting_date_20261029';
+        const STORAGE_NOTE_KEY = 'nyuszi_next_meeting_note_20261029';
 
         function getDefaultTargetDate() {
-            // Alapértelmezett találkozó: 2026.10.30. 14:00
-            return new Date(2026, 9, 30, 14, 0, 0, 0);
+            // Alapértelmezett találkozó: 2026.10.29. 23:00
+            return new Date(2026, 10, 29, 23, 0, 0, 0);
         }
 
         let targetDate = localStorage.getItem(STORAGE_DATE_KEY)
