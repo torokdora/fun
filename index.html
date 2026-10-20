@@ -115,6 +115,13 @@
             border: 1px solid rgba(254, 205, 211, 0.5);
         }
 
+        /* Receptkönyv papír hatás */
+        .recipe-paper {
+            background-color: #fffdf9;
+            background-image: linear-gradient(transparent 95%, rgba(254, 205, 211, 0.35) 95%);
+            background-size: 100% 28px;
+        }
+
         /* 360 Planetárium kurzor */
         .sky-viewer-canvas {
             cursor: grab;
@@ -132,17 +139,17 @@
 
     <!-- Felső navigáció -->
     <header class="sticky top-4 z-30 mx-auto w-[92%] max-w-3xl mt-4">
-        <nav class="glass-card rounded-full px-5 py-3 shadow-soft flex items-center justify-between">
-            <a href="#top" class="flex items-center gap-2 text-rose-800 font-serif font-semibold text-xl tracking-wide">
+        <nav class="glass-card rounded-full px-4 sm:px-5 py-3 shadow-soft flex items-center justify-between">
+            <a href="#top" class="flex items-center gap-1.5 text-rose-800 font-serif font-semibold text-lg sm:text-xl tracking-wide shrink-0">
                 <span class="text-xl">🐰🩷</span>
                 <span>Nyuszi</span>
-                <span class="text-base"></span>
             </a>
-            <div class="flex items-center gap-2.5 sm:gap-5 text-xs sm:text-sm font-medium text-stone-600">
-                <a href="#talalkozo" class="hover:text-rose-600 transition-colors py-1">Találkozó</a>
-                <a href="#csillagok" class="hover:text-rose-600 transition-colors py-1">Csillagok ✨</a>
-                <a href="#csokor" class="hover:text-rose-600 transition-colors py-1">Virágcsokor</a>
-                <a href="#zene" class="hover:text-rose-600 transition-colors py-1">Spotify</a>
+            <div class="flex items-center gap-2 sm:gap-4 text-xs sm:text-sm font-medium text-stone-600 overflow-x-auto no-scrollbar py-0.5">
+                <a href="#talalkozo" class="hover:text-rose-600 transition-colors whitespace-nowrap">Találkozó</a>
+                <a href="#csillagok" class="hover:text-rose-600 transition-colors whitespace-nowrap">Csillagok ✨</a>
+                <a href="#csokor" class="hover:text-rose-600 transition-colors whitespace-nowrap">Csokor</a>
+                <a href="#bakancslista" class="hover:text-rose-600 transition-colors whitespace-nowrap">Listáink 🎬✈️</a>
+                <a href="#receptek" class="hover:text-rose-600 transition-colors whitespace-nowrap">Receptkönyv 📖</a>
             </div>
         </nav>
     </header>
@@ -150,7 +157,7 @@
     <!-- Fő tartalom -->
     <main id="top" class="relative z-10 max-w-3xl w-[92%] mx-auto pt-8 pb-20 space-y-12 sm:space-y-16">
 
-        <!-- 1. HERO / KÖSZÖNTŐ SZEKCIÓ (Letisztult, csak a kért szövegekkel) -->
+        <!-- 1. HERO / KÖSZÖNTŐ SZEKCIÓ -->
         <section class="text-center pt-6 pb-2">
             <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-rose-100/80 border border-rose-200 text-rose-700 text-sm font-medium mb-5 shadow-sm">
                 <span>🦉</span>
@@ -172,7 +179,6 @@
             <div class="glass-card rounded-3xl p-6 sm:p-8 shadow-soft max-w-lg mx-auto relative overflow-hidden">
                 <div class="absolute -top-6 -right-6 w-24 h-24 bg-rose-100 rounded-full opacity-50 pointer-events-none"></div>
                 <div class="text-2xl mb-2 flex items-center justify-center gap-2">
-                    <span></span>
                     <span>🩷</span>
                 </div>
                 <p class="font-serif italic text-2xl sm:text-3xl text-stone-800 leading-relaxed">
@@ -231,7 +237,7 @@
                     <span id="meeting-note-display" class="italic text-rose-600 font-serif text-base"></span>
                 </div>
 
-                <!-- Dátum szerkesztő panel (alapból rejtett) -->
+                <!-- Dátum szerkesztő panel -->
                 <div id="date-editor" class="hidden mt-6 pt-6 border-t border-rose-100 bg-rose-50/50 -mx-6 -mb-6 sm:-mx-10 sm:-mb-10 p-6 sm:p-8 rounded-b-3xl">
                     <h4 class="font-medium text-stone-800 text-sm mb-4 flex items-center gap-2">
                         <i data-lucide="calendar-heart" class="w-4 h-4 text-rose-500"></i>
@@ -282,13 +288,11 @@
                     </div>
                 </div>
 
-                <!-- 3/A: 360°-os Interaktív Csillagkupola (Planetárium) -->
+                <!-- 3/A: 360°-os Interaktív Csillagkupola -->
                 <div id="sky-360-wrapper" class="space-y-4">
                     <div class="relative w-full h-[420px] sm:h-[500px] rounded-2xl overflow-hidden border border-rose-200/80 bg-[#050814] shadow-inner select-none">
-                        <!-- Three.js 360 vászon konténer -->
                         <div id="sky-360-container" class="w-full h-full sky-viewer-canvas"></div>
 
-                        <!-- Felső lebegő iránytű és cím jelvény -->
                         <div class="absolute top-4 left-4 right-4 flex items-center justify-between pointer-events-none">
                             <div class="bg-black/50 backdrop-blur-md border border-white/15 text-white px-3.5 py-1.5 rounded-full text-xs flex items-center gap-2">
                                 <span class="w-2 h-2 rounded-full bg-rose-400 animate-pulse"></span>
@@ -299,7 +303,6 @@
                             </div>
                         </div>
 
-                        <!-- Alsó vezérlőgombok és felirat a 360 nézeten -->
                         <div class="absolute bottom-4 left-4 right-4 flex flex-col sm:flex-row items-center justify-between gap-3 pointer-events-none">
                             <div class="bg-black/55 backdrop-blur-md border border-white/10 text-white/90 px-4 py-2 rounded-2xl text-center sm:text-left">
                                 <p class="font-serif italic text-base sm:text-lg text-rose-200 leading-tight">— The sky the night we met —</p>
@@ -319,7 +322,7 @@
                     </div>
                 </div>
 
-                <!-- 3/B: Eredeti Poszter Nézet (Interaktív 3D döntéssel és forgatással) -->
+                <!-- 3/B: Eredeti Poszter Nézet -->
                 <div id="sky-poster-wrapper" class="hidden">
                     <div class="flex flex-col items-center justify-center bg-[#f4f1ea] rounded-2xl p-4 sm:p-8 border border-rose-200/80 shadow-inner">
                         <div id="poster-tilt-card" class="relative max-w-md w-full rounded-2xl overflow-hidden shadow-xl transition-transform duration-200 ease-out cursor-grab active:cursor-grabbing bg-[#f4f1ea]">
@@ -329,7 +332,6 @@
                                 alt="The sky the night we met - Velence, Hungary - 2024.05.06" 
                                 class="w-full h-auto block select-none"
                                 onerror="this.style.display='none'; document.getElementById('poster-fallback-canvas-wrap').classList.remove('hidden');">
-                            <!-- Fallback ha a lokális kép más néven töltődne be: kirajzoljuk a posztert nagy felbontásban -->
                             <div id="poster-fallback-canvas-wrap" class="hidden w-full">
                                 <canvas id="poster-fallback-canvas" width="900" height="1000" class="w-full h-auto block"></canvas>
                             </div>
@@ -351,7 +353,6 @@
                         <h2 class="font-serif text-3xl sm:text-4xl font-semibold text-stone-800">Egy csokor virág Neked 🌸😍</h2>
                     </div>
 
-                    <!-- Nézet váltó gombok (DigiBouquet beágyazás vs. Rajzolt csokor) -->
                     <div class="inline-flex rounded-full p-1 bg-rose-100/70 border border-rose-200 self-start sm:self-auto">
                         <button id="tab-embed" onclick="switchBouquetTab('embed')" class="px-3.5 py-1.5 rounded-full text-xs font-medium transition-all bg-white text-rose-700 shadow-sm">
                             DigiBouquet nézet
@@ -454,7 +455,7 @@
                         </div>
                         <div>
                             <p class="text-sm font-medium text-stone-800">A saját DigiBouquet csokrod 🩷</p>
-                            <p class="text-xs text-stone-500">Teljes képernyős megnyitás </p>
+                            <p class="text-xs text-stone-500">Teljes képernyős megnyitás</p>
                         </div>
                     </div>
                     <a href="https://digibouquet.vercel.app/bouquet/e245ac27-5058-4150-bc63-700c38978b18" 
@@ -468,36 +469,135 @@
             </div>
         </section>
 
-        <!-- 5. KÖZÖS SPOTIFY LEJÁTSZÁSI LISTA SZEKCIÓ (Bevezető szöveg nélkül!) -->
-        <section id="zene" class="scroll-mt-24">
+        <!-- 5. KÖZÖS BAKANCSLISTA (FILMEK & SOROZATOK + UTAZÁSOK) SZEKCIÓ -->
+        <section id="bakancslista" class="scroll-mt-24">
             <div class="glass-card rounded-3xl p-6 sm:p-10 shadow-soft">
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-5">
-                    <div class="flex items-center gap-2.5">
-                        <h2 class="font-serif text-3xl sm:text-4xl font-semibold text-stone-800">Közös Spotify 🎶</h2>
-                        <span class="text-xl">🩷🤭😍</span>
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 border-b border-rose-100/80 pb-5">
+                    <div>
+                        <span class="text-xs uppercase tracking-widest text-rose-500 font-semibold block mb-1">Közös terveink és álmaink 🩷🤭</span>
+                        <h2 class="font-serif text-3xl sm:text-4xl font-semibold text-stone-800">Közös Bakancslistánk ✨</h2>
                     </div>
-                    <a href="https://open.spotify.com/playlist/5jvA0gqT0R6DeDULktlBwF?si=zBhA7y2JQOG6I4VAXPFV3w&utm_source=sms&pi=R5M65RGVQ6289" 
-                       target="_blank" 
-                       rel="noopener noreferrer"
-                       class="self-start sm:self-auto inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#1DB954]/10 hover:bg-[#1DB954]/20 text-[#15883e] border border-[#1DB954]/30 text-xs sm:text-sm font-medium transition">
-                        <i data-lucide="music" class="w-4 h-4"></i>
-                        <span>Megnyitás Spotify-on</span>
-                    </a>
+
+                    <!-- Fülváltó: Filmek vs Utazások -->
+                    <div class="inline-flex rounded-full p-1 bg-rose-100/70 border border-rose-200 self-start sm:self-auto">
+                        <button id="tab-list-movies" onclick="switchBucketTab('movies')" class="px-4 py-1.5 rounded-full text-xs sm:text-sm font-medium transition-all bg-white text-rose-700 shadow-sm flex items-center gap-1.5">
+                            <span>🎬 Filmek & Sorozatok</span>
+                            <span id="badge-movies" class="ml-1 px-1.5 py-0.5 text-[10px] rounded-full bg-rose-100 text-rose-700">0</span>
+                        </button>
+                        <button id="tab-list-travel" onclick="switchBucketTab('travel')" class="px-4 py-1.5 rounded-full text-xs sm:text-sm font-medium transition-all text-stone-600 hover:text-rose-700 flex items-center gap-1.5">
+                            <span>✈️ Utazások</span>
+                            <span id="badge-travel" class="ml-1 px-1.5 py-0.5 text-[10px] rounded-full bg-stone-200/70 text-stone-600">0</span>
+                        </button>
+                    </div>
                 </div>
 
-                <!-- Hivatalos Spotify Beágyazott Lejátszó (bevezető szöveg nélkül) -->
-                <div class="rounded-2xl overflow-hidden shadow-md border border-rose-100 bg-stone-900">
-                    <iframe 
-                        style="border-radius:16px" 
-                        src="https://open.spotify.com/embed/playlist/5jvA0gqT0R6DeDULktlBwF?utm_source=generator" 
-                        width="100%" 
-                        height="380" 
-                        frameBorder="0" 
-                        allowfullscreen="" 
-                        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
-                        loading="lazy">
-                    </iframe>
+                <!-- 5/A: Filmek és Sorozatok Fül -->
+                <div id="bucket-movies-panel" class="space-y-5">
+                    <form onsubmit="addBucketItem(event, 'movies')" class="grid grid-cols-1 sm:grid-cols-12 gap-2.5 bg-rose-50/60 p-3.5 rounded-2xl border border-rose-100">
+                        <input type="text" id="movie-title-input" required placeholder="Film vagy sorozat címe... 🍿" class="sm:col-span-5 px-3.5 py-2.5 rounded-xl border border-rose-200 bg-white text-stone-800 text-sm focus:outline-none focus:ring-2 focus:ring-rose-400">
+                        <input type="text" id="movie-note-input" placeholder="Megjegyzés (pl. Netflix, bekuckózós) 🧸" class="sm:col-span-5 px-3.5 py-2.5 rounded-xl border border-rose-200 bg-white text-stone-800 text-sm focus:outline-none focus:ring-2 focus:ring-rose-400">
+                        <button type="submit" class="sm:col-span-2 inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs sm:text-sm font-medium transition shadow-sm active:scale-95">
+                            <i data-lucide="plus" class="w-4 h-4"></i>
+                            <span>Hozzáad</span>
+                        </button>
+                    </form>
+
+                    <div id="movies-list-container" class="space-y-2.5"></div>
                 </div>
+
+                <!-- 5/B: Utazások és Helyek Fül -->
+                <div id="bucket-travel-panel" class="hidden space-y-5">
+                    <form onsubmit="addBucketItem(event, 'travel')" class="grid grid-cols-1 sm:grid-cols-12 gap-2.5 bg-rose-50/60 p-3.5 rounded-2xl border border-rose-100">
+                        <input type="text" id="travel-title-input" required placeholder="Hová utazzunk el? (pl. Olaszország, Párizs) 🌍" class="sm:col-span-5 px-3.5 py-2.5 rounded-xl border border-rose-200 bg-white text-stone-800 text-sm focus:outline-none focus:ring-2 focus:ring-rose-400">
+                        <input type="text" id="travel-note-input" placeholder="Mit csinálunk ott? / Mikor? ✨" class="sm:col-span-5 px-3.5 py-2.5 rounded-xl border border-rose-200 bg-white text-stone-800 text-sm focus:outline-none focus:ring-2 focus:ring-rose-400">
+                        <button type="submit" class="sm:col-span-2 inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs sm:text-sm font-medium transition shadow-sm active:scale-95">
+                            <i data-lucide="plus" class="w-4 h-4"></i>
+                            <span>Hozzáad</span>
+                        </button>
+                    </form>
+
+                    <div id="travel-list-container" class="space-y-2.5"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. KÖZÖS RECEPTKÖNYV SZEKCIÓ -->
+        <section id="receptek" class="scroll-mt-24">
+            <div class="glass-card rounded-3xl p-6 sm:p-10 shadow-soft relative overflow-hidden">
+                <!-- Díszítő könyvgerinc csík a bal szélen -->
+                <div class="absolute top-0 bottom-0 left-0 w-2.5 bg-gradient-to-b from-rose-300 via-rose-400 to-rose-300 opacity-75"></div>
+
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 border-b border-rose-100/80 pb-5 pl-2">
+                    <div>
+                        <span class="text-xs uppercase tracking-widest text-rose-500 font-semibold block mb-1">Közös sütés-főzés 👩‍🍳👨‍🍳🩷</span>
+                        <h2 class="font-serif text-3xl sm:text-4xl font-semibold text-stone-800">Közös Receptkönyvünk 📖🍓</h2>
+                    </div>
+                    <button onclick="toggleRecipeForm()" id="btn-toggle-recipe" class="self-start sm:self-auto inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-rose-600 hover:bg-rose-700 text-white text-xs sm:text-sm font-medium transition-all shadow-sm active:scale-95">
+                        <i data-lucide="book-plus" class="w-4 h-4"></i>
+                        <span>Új recept beírása</span>
+                    </button>
+                </div>
+
+                <!-- Új recept hozzáadása / szerkesztése űrlap (alapból rejtett) -->
+                <div id="recipe-form-wrapper" class="hidden mb-8 bg-[#fffdf9] border-2 border-dashed border-rose-200 rounded-2xl p-5 sm:p-7 shadow-sm">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 id="recipe-form-title" class="font-serif text-2xl font-semibold text-rose-800 flex items-center gap-2">
+                            <span>🍰</span>
+                            <span>Új közös recept feljegyzése</span>
+                        </h3>
+                        <button onclick="toggleRecipeForm()" class="text-stone-400 hover:text-stone-600 p-1">
+                            <i data-lucide="x" class="w-5 h-5"></i>
+                        </button>
+                    </div>
+
+                    <form onsubmit="saveRecipe(event)" class="space-y-4">
+                        <input type="hidden" id="recipe-edit-id" value="">
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                            <div class="sm:col-span-1">
+                                <label class="block text-xs text-stone-600 mb-1 font-medium">Étel / Süti neve *</label>
+                                <input type="text" id="recipe-title" required placeholder="Pl. Epres tiramisu 🍓" class="w-full px-3.5 py-2.5 rounded-xl border border-rose-200 bg-white text-stone-800 text-sm focus:outline-none focus:ring-2 focus:ring-rose-400">
+                            </div>
+                            <div>
+                                <label class="block text-xs text-stone-600 mb-1 font-medium">Kategória</label>
+                                <select id="recipe-category" class="w-full px-3.5 py-2.5 rounded-xl border border-rose-200 bg-white text-stone-800 text-sm focus:outline-none focus:ring-2 focus:ring-rose-400">
+                                    <option value="🧁 Desszert / Süti">🧁 Desszert / Süti</option>
+                                    <option value="🍝 Főétel / Vacsi">🍝 Főétel / Vacsi</option>
+                                    <option value="🥞 Reggeli / Brunch">🥞 Reggeli / Brunch</option>
+                                    <option value="🍕 Rápizza / Snack">🍕 Rápizza / Snack</option>
+                                    <option value="🍹 Ital / Koktél">🍹 Ital / Koktél</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs text-stone-600 mb-1 font-medium">Elkészítési idő (opcionális)</label>
+                                <input type="text" id="recipe-time" placeholder="Pl. 45 perc" class="w-full px-3.5 py-2.5 rounded-xl border border-rose-200 bg-white text-stone-800 text-sm focus:outline-none focus:ring-2 focus:ring-rose-400">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs text-stone-600 mb-1 font-medium">Hozzávalók (soronként vagy vesszővel)</label>
+                                <textarea id="recipe-ingredients" rows="4" placeholder="Pl.&#10;- 250g mascarpone&#10;- Friss eper&#10;- Babapiskóta" class="w-full px-3.5 py-2.5 rounded-xl border border-rose-200 bg-white text-stone-800 text-sm focus:outline-none focus:ring-2 focus:ring-rose-400"></textarea>
+                            </div>
+                            <div>
+                                <label class="block text-xs text-stone-600 mb-1 font-medium">Elkészítés / Megjegyzés / Link</label>
+                                <textarea id="recipe-steps" rows="4" placeholder="Írd ide, hogyan készül, vagy másold be a TikTok / Insta / StreetKitchen linket! 🩷" class="w-full px-3.5 py-2.5 rounded-xl border border-rose-200 bg-white text-stone-800 text-sm focus:outline-none focus:ring-2 focus:ring-rose-400"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-end gap-2 pt-2">
+                            <button type="button" onclick="toggleRecipeForm()" class="px-4 py-2 rounded-xl border border-stone-200 bg-white text-stone-600 text-xs sm:text-sm font-medium hover:bg-stone-50 transition">
+                                Mégse
+                            </button>
+                            <button type="submit" class="inline-flex items-center gap-1.5 px-5 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs sm:text-sm font-medium transition shadow-sm">
+                                <i data-lucide="save" class="w-4 h-4"></i>
+                                <span>Recept mentése</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Receptkönyv kártyák rácsa -->
+                <div id="recipes-grid" class="grid grid-cols-1 md:grid-cols-2 gap-5 pl-2"></div>
             </div>
         </section>
 
@@ -512,7 +612,7 @@
     <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
         <div class="bg-stone-800 text-white px-4 py-3 rounded-2xl shadow-lg flex items-center gap-2.5 text-xs sm:text-sm">
             <span>🩷</span>
-            <span id="toast-message">Időpont elmentve!</span>
+            <span id="toast-message">Elmentve!</span>
         </div>
     </div>
 
@@ -520,12 +620,19 @@
         // Lucide ikonok inicializálása
         lucide.createIcons();
 
+        // Segédfüggvény HTML szökéshez (XSS védelem egyedi szövegeknél)
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/[&<>"']/g, function(m) {
+                return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[m];
+            });
+        }
+
         // --- 1. VISSZASZÁMLÁLÓ LOGIKA ÉS DÁTUM SZERKESZTŐ ---
         const STORAGE_DATE_KEY = 'nyuszi_next_meeting_date_20261029';
         const STORAGE_NOTE_KEY = 'nyuszi_next_meeting_note_20261029';
 
         function getDefaultTargetDate() {
-            // Alapértelmezett találkozó: 2026.10.29. 23:00
             return new Date(2026, 9, 29, 23, 0, 0, 0);
         }
 
@@ -624,31 +731,20 @@
         let scene, camera, renderer, skyGroup;
         let isDraggingSky = false;
         let prevMouse = { x: 0, y: 0 };
-        let lon = 0, lat = 25; // Kezdő nézőpont: Észak felé, enyhén felfelé a csillagokra
+        let lon = 0, lat = 25;
         let fov = 68;
         let autoRotateSky = true;
 
-        // Csillagképek adatai a 2024.05.06 Velence csillagtérképről (hogy a 360°-os kupolában tűélesen ragyogjanak)
         const constellationsData = [
-            // Göncölszekér / Ursa Major
             [[0.15, 0.72, -0.65], [0.22, 0.76, -0.60], [0.28, 0.74, -0.62], [0.35, 0.70, -0.60], [0.38, 0.62, -0.68], [0.48, 0.65, -0.58], [0.45, 0.73, -0.50], [0.35, 0.70, -0.60]],
-            // Cassiopeia
             [[-0.25, 0.55, -0.78], [-0.18, 0.60, -0.76], [-0.12, 0.54, -0.82], [-0.05, 0.58, -0.79], [0.02, 0.52, -0.84]],
-            // Leo (Oroszlán)
             [[0.45, 0.48, 0.75], [0.52, 0.55, 0.65], [0.62, 0.52, 0.58], [0.68, 0.42, 0.60], [0.55, 0.38, 0.74], [0.45, 0.48, 0.75], [0.42, 0.60, 0.68], [0.48, 0.66, 0.58]],
-            // Cygnus (Hattyú)
             [[-0.65, 0.45, -0.60], [-0.55, 0.55, -0.62], [-0.45, 0.65, -0.60], [-0.55, 0.55, -0.62], [-0.68, 0.62, -0.50], [-0.42, 0.48, -0.72]],
-            // Bootes (Ökörhajcsár)
             [[-0.10, 0.78, 0.60], [-0.02, 0.85, 0.52], [0.08, 0.82, 0.55], [0.05, 0.72, 0.68], [-0.05, 0.68, 0.72], [-0.10, 0.78, 0.60]],
-            // Virgo (Szűz)
             [[-0.15, 0.38, 0.90], [-0.05, 0.45, 0.88], [0.06, 0.42, 0.90], [0.15, 0.50, 0.85], [0.06, 0.42, 0.90], [0.10, 0.30, 0.94]],
-            // Gemini (Ikrek)
             [[0.75, 0.35, -0.55], [0.82, 0.42, -0.38], [0.78, 0.50, -0.36], [0.70, 0.44, -0.55], [0.75, 0.35, -0.55]],
-            // Scorpius / Dél-keleti horizont
             [[-0.55, 0.25, 0.78], [-0.48, 0.32, 0.81], [-0.40, 0.30, 0.86], [-0.35, 0.22, 0.90], [-0.42, 0.16, 0.89]],
-            // Auriga (Szekeres)
             [[0.55, 0.50, -0.66], [0.64, 0.58, -0.50], [0.72, 0.48, -0.49], [0.65, 0.38, -0.65], [0.55, 0.42, -0.72], [0.55, 0.50, -0.66]],
-            // Hercules
             [[-0.45, 0.72, 0.52], [-0.35, 0.76, 0.54], [-0.32, 0.68, 0.65], [-0.42, 0.64, 0.64], [-0.45, 0.72, 0.52]]
         ];
 
@@ -693,11 +789,9 @@
             skyGroup = new THREE.Group();
             scene.add(skyGroup);
 
-            // 1. Éjszakai égbolt kupola + a feltöltött IMG_6979.jpg csillagtérkép rávetítése a zenitre
             const domeGeo = new THREE.SphereGeometry(90, 64, 48);
-            domeGeo.scale(-1, 1, 1); // Belső felület megjelenítése
+            domeGeo.scale(-1, 1, 1);
 
-            // Alap mélykék/tejútrendszeres égbolt textúra generálása + a feltöltött kép ráolvasztása ha betölt
             const skyCanvas = document.createElement('canvas');
             skyCanvas.width = 1024;
             skyCanvas.height = 512;
@@ -711,7 +805,6 @@
             sCtx.fillStyle = grad;
             sCtx.fillRect(0, 0, 1024, 512);
 
-            // Tejút ködösség sáv
             sCtx.save();
             sCtx.translate(512, 200);
             sCtx.rotate(-0.45);
@@ -726,7 +819,6 @@
             sCtx.fill();
             sCtx.restore();
 
-            // Fenyőfák sziluettje a horizonton (mint a poszter alján)
             sCtx.fillStyle = '#020409';
             sCtx.fillRect(0, 390, 1024, 122);
             for (let x = 0; x < 1024; x += 14) {
@@ -743,17 +835,14 @@
             const domeMesh = new THREE.Mesh(domeGeo, domeMat);
             skyGroup.add(domeMesh);
 
-            // 2. Eredeti IMG_6979.jpg csillagkör elhelyezése a kupola tetején (zenit), hogy felnézve az eredeti kép is látszódjon
             const imgLoader = new Image();
             imgLoader.crossOrigin = "anonymous";
             imgLoader.onload = () => {
-                // Kör alakú kivágás az IMG_6979.jpg-ből a kupolára
                 const capCanvas = document.createElement('canvas');
                 capCanvas.width = 1024;
                 capCanvas.height = 1024;
                 const cCtx = capCanvas.getContext('2d');
 
-                // A poszteren a fekete csillagkör középen, kicsit feljebb helyezkedik el
                 const cx = imgLoader.width * 0.5;
                 const cy = imgLoader.height * 0.422;
                 const r = imgLoader.width * 0.375;
@@ -766,7 +855,6 @@
                 cCtx.drawImage(imgLoader, cx - r, cy - r, r * 2, r * 2, 0, 0, 1024, 1024);
                 cCtx.restore();
 
-                // Lágy perem elmosás
                 const fadeGrad = cCtx.createRadialGradient(512, 512, 400, 512, 512, 500);
                 fadeGrad.addColorStop(0, 'rgba(0,0,0,0)');
                 fadeGrad.addColorStop(1, '#040817');
@@ -782,7 +870,6 @@
             };
             imgLoader.src = 'IMG_6979.jpg';
 
-            // 3. 1800 db ragyogó 3D csillag a teljes 360°-os térben
             const starCount = 1800;
             const starPositions = new Float32Array(starCount * 3);
             const starColors = new Float32Array(starCount * 3);
@@ -795,14 +882,13 @@
                 const rad = 82;
 
                 const x = rad * Math.sin(phi) * Math.cos(theta);
-                const y = Math.abs(rad * Math.cos(phi)) - 8; // Horizont felett sűrűbb
+                const y = Math.abs(rad * Math.cos(phi)) - 8;
                 const z = rad * Math.sin(phi) * Math.sin(theta);
 
                 starPositions[i * 3] = x;
                 starPositions[i * 3 + 1] = y;
                 starPositions[i * 3 + 2] = z;
 
-                // Csillagszínek: fehér, halvány arany, halvány rózsaszín/kék
                 const tint = Math.random();
                 if (tint > 0.88) {
                     starColors[i * 3] = 1.0; starColors[i * 3 + 1] = 0.85; starColors[i * 3 + 2] = 0.65;
@@ -820,7 +906,6 @@
             const starField = new THREE.Points(starsGeo, starsMat);
             skyGroup.add(starField);
 
-            // 4. Csillagkép vonalak és csomópontok (mint a Velence 2024.05.06 térképen)
             const lineMat = new THREE.LineBasicMaterial({ color: 0xdbeafe, transparent: true, opacity: 0.55 });
             const brightStarGeo = new THREE.SphereGeometry(0.65, 12, 12);
             const brightStarMat = new THREE.MeshBasicMaterial({ color: 0xfffbeb });
@@ -840,7 +925,6 @@
                 skyGroup.add(line);
             });
 
-            // 5. Égtájak (N, E, S, W) és Horizont gyűrű (ahogy a képen szerepel)
             const horizonRingGeo = new THREE.RingGeometry(79.5, 80, 96);
             horizonRingGeo.rotateX(Math.PI / 2);
             const horizonRingMat = new THREE.MeshBasicMaterial({ color: 0xfda4af, side: THREE.DoubleSide, transparent: true, opacity: 0.3 });
@@ -860,7 +944,6 @@
                 skyGroup.add(sp);
             });
 
-            // Eseménykezelők egérhez és érintőképernyőhöz (360° körbeforgatás)
             const domEl = renderer.domElement;
 
             domEl.addEventListener('pointerdown', (e) => {
@@ -880,7 +963,7 @@
 
                 lon -= dx * 0.22;
                 lat += dy * 0.22;
-                lat = Math.max(-15, Math.min(89, lat)); // Horizonttól egészen a zenitig (90 fok)
+                lat = Math.max(-15, Math.min(89, lat));
                 updateCompassHeading();
             });
 
@@ -888,7 +971,6 @@
                 isDraggingSky = false;
             });
 
-            // Görgős nagyítás (zoom)
             domEl.addEventListener('wheel', (e) => {
                 e.preventDefault();
                 fov = Math.max(35, Math.min(85, fov + e.deltaY * 0.04));
@@ -959,7 +1041,7 @@
 
         function resetSkyCamera() {
             lon = 0;
-            lat = 65; // Felnézés a csillagtérkép közepére
+            lat = 65;
             fov = 68;
             if (camera) {
                 camera.fov = fov;
@@ -987,7 +1069,6 @@
             }
         }
 
-        // Poszter 3D döntés effekt és fallback rajzolás
         function initPosterTiltAndFallback() {
             const card = document.getElementById('poster-tilt-card');
             if (card) {
@@ -1002,14 +1083,12 @@
                 });
             }
 
-            // Fallback vászon, ha az IMG_6979.jpg nem töltődne be közvetlenül
             const c = document.getElementById('poster-fallback-canvas');
             if (!c) return;
             const ctx = c.getContext('2d');
             ctx.fillStyle = '#f3f0ea';
             ctx.fillRect(0, 0, 900, 1000);
 
-            // Külső gyűrű és csillagkör
             const cx = 450, cy = 420, r = 340;
             ctx.beginPath();
             ctx.arc(cx, cy, r + 6, 0, Math.PI * 2);
@@ -1025,97 +1104,9 @@
             ctx.arc(cx, cy, r, 0, Math.PI * 2);
             ctx.fill();
 
-            // Csillagok a poszteren
             for (let i = 0; i < 450; i++) {
                 const a = Math.random() * Math.PI * 2;
                 const d = Math.sqrt(Math.random()) * (r - 8);
                 ctx.fillStyle = Math.random() > 0.85 ? '#fde68a' : '#ffffff';
                 ctx.beginPath();
-                ctx.arc(cx + Math.cos(a) * d, cy + Math.sin(a) * d, Math.random() * 1.8 + 0.4, 0, Math.PI * 2);
-                ctx.fill();
-            }
-
-            // Égtájak (N, E, S, W)
-            ctx.fillStyle = '#1c1917';
-            ctx.font = '600 22px "Cormorant Garamond", serif';
-            ctx.textAlign = 'center';
-            ctx.fillText('N', cx, cy - r - 16);
-            ctx.fillText('S', cx, cy + r + 28);
-            ctx.fillText('E', cx - r - 22, cy + 7);
-            ctx.fillText('W', cx + r + 24, cy + 7);
-
-            // Felirat alul
-            ctx.font = 'italic 34px "Cormorant Garamond", serif';
-            ctx.fillText('— The sky the night we met —', cx, 855);
-            ctx.font = '400 20px "Cormorant Garamond", serif';
-            ctx.fillText('Velence, Hungary', cx, 890);
-            ctx.font = '400 16px "Plus Jakarta Sans", sans-serif';
-            ctx.fillStyle = '#44403c';
-            ctx.fillText('47.24177° N  ·  18.64790° E', cx, 920);
-            ctx.fillText('2024.05.06', cx, 946);
-            ctx.fillText('— ✦ —', cx, 976);
-        }
-
-        // --- 3. VIRÁGCSOKOR NÉZETVÁLTÓ ---
-        function switchBouquetTab(tab) {
-            const embedView = document.getElementById('bouquet-embed-view');
-            const svgView = document.getElementById('bouquet-svg-view');
-            const tabEmbed = document.getElementById('tab-embed');
-            const tabSvg = document.getElementById('tab-svg');
-
-            if (tab === 'embed') {
-                embedView.classList.remove('hidden');
-                svgView.classList.add('hidden');
-                tabEmbed.className = "px-3.5 py-1.5 rounded-full text-xs font-medium transition-all bg-white text-rose-700 shadow-sm";
-                tabSvg.className = "px-3.5 py-1.5 rounded-full text-xs font-medium transition-all text-stone-600 hover:text-rose-700";
-            } else {
-                embedView.classList.add('hidden');
-                svgView.classList.remove('hidden');
-                tabSvg.className = "px-3.5 py-1.5 rounded-full text-xs font-medium transition-all bg-white text-rose-700 shadow-sm";
-                tabEmbed.className = "px-3.5 py-1.5 rounded-full text-xs font-medium transition-all text-stone-600 hover:text-rose-700";
-            }
-        }
-
-        // --- 4. LEBEGŐ EMOJIK (🦉, 🤭, 🩷, 😍) ÉS VIRÁGSZIRMOK ---
-        function createFloatingPetals(count = 16) {
-            const container = document.getElementById('petals-container');
-            const symbols = ['🩷', '🦉', '🤭', '😍', '🌸', '🩷'];
-
-            for (let i = 0; i < count; i++) {
-                const petal = document.createElement('div');
-                petal.className = 'petal';
-                petal.textContent = symbols[Math.floor(Math.random() * symbols.length)];
-                petal.style.left = `${Math.random() * 100}vw`;
-                petal.style.fontSize = `${Math.random() * 10 + 13}px`;
-                petal.style.animationDuration = `${Math.random() * 12 + 13}s`;
-                petal.style.animationDelay = `${Math.random() * 10}s`;
-                container.appendChild(petal);
-            }
-        }
-
-        function triggerPetalShower() {
-            createFloatingPetals(8);
-            showToast("Egy csokor ölelés Nyuszinak! 🩷😍");
-        }
-
-        // --- 5. TOAST ÉRTESÍTÉS ---
-        function showToast(msg) {
-            const toast = document.getElementById('toast');
-            document.getElementById('toast-message').textContent = msg;
-            toast.classList.remove('translate-y-20', 'opacity-0');
-            setTimeout(() => {
-                toast.classList.add('translate-y-20', 'opacity-0');
-            }, 3000);
-        }
-
-        // Indítás betöltéskor
-        window.addEventListener('DOMContentLoaded', () => {
-            updateCountdownDisplay();
-            setInterval(updateCountdownDisplay, 1000);
-            createFloatingPetals(16);
-            initSky360();
-            initPosterTiltAndFallback();
-        });
-    </script>
-</body>
-</html>
+                ctx.arc(cx + Math.cos(a) * d, cy + Math.sin(a) * d, Math.random() * 1
