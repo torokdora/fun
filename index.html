@@ -291,7 +291,7 @@
                 
 
                  <p class="text-sm text-stone-600 mb-6 italic">
-                    Nyuszi, kattints a mai napra! Először ki kell találnod a napi titkos jelszót (barkóba), hogy kinyíljon az ablak! 🤫🩷
+                    Nyuszi, kattints a mai napra! Először ki kell találnod a napi titkos jelszót, hogy kinyíljon az ablak! 🤫🩷
                 </p>
 
                 <!-- 12-es kalendárium rács -->
@@ -926,12 +926,12 @@
             for (let i = 1; i <= 12; i++) {
                 const isOpened = adventOpened[i];
                 gridHtml += `
-                    <button type="button" onclick="clickAdventDay(${i})" class="aspect-square rounded-2xl p-2 flex flex-col items-center justify-center transition-all shadow-sm border font-serif text-lg font-bold relative overflow-hidden group ${isOpened ? 'bg-rose-50 border-rose-300 text-rose-800' : 'bg-gradient-to-br from-rose-500 to-rose-600 hover:from-rose-600 hover:to-rose-700 border-rose-400 text-white shadow-md hover:scale-105'}">
-                        <span class="text-xs uppercase tracking-wider opacity-80 font-sans">Nap</span>
-                        <span class="text-2xl sm:text-3xl">${i}</span>
+            
+                    <button type="button" onclick="clickAdventDay(${i})" class="aspect-square rounded-2xl p-2 flex flex-col items-center justify-center transition-all shadow-sm border font-serif text-base sm:text-lg font-bold relative overflow-hidden group ${isOpened ? 'bg-rose-50 border-rose-300 text-rose-800' : 'bg-gradient-to-br from-rose-500 to-rose-600 hover:from-rose-600 hover:to-rose-700 border-rose-400 text-white shadow-md hover:scale-105'}">
+                        <span class="text-xs sm:text-sm">${i}. nap</span>
                         <span class="absolute bottom-1 text-[10px] opacity-75">${isOpened ? 'Nyitva 🩷' : '🔐 Jelszó'}</span>
-                    </button>
-                `;
+                     </button>
+                     
             }
             grid.innerHTML = gridHtml;
         }
@@ -944,7 +944,7 @@
                 return;
             }
             activeAttemptDay = day;
-            document.getElementById('password-modal-title').textContent = `December ${day}. 🔐`;
+            document.getElementById('password-modal-title').textContent = `${day}. 🔐`;
             document.getElementById('advent-guess-input').value = '';
             document.getElementById('password-error-msg').classList.add('hidden');
             document.getElementById('password-modal').classList.remove('hidden');
@@ -975,7 +975,7 @@
 
         function showAdventMessageModal(day) {
             const msg = adventMessages[day] || "Valami készül... 🤫🩷";
-            document.getElementById('advent-modal-title').textContent = `December ${day}. 🎄`;
+            document.getElementById('advent-modal-title').textContent = `${day}. 🎄`;
             document.getElementById('advent-modal-content').textContent = `„${msg}”`;
             document.getElementById('advent-modal').classList.remove('hidden');
         }
