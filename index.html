@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="hu" class="scroll-smooth">
 <head>
@@ -112,6 +113,11 @@
 
         .sky-viewer-canvas { cursor: grab; }
         .sky-viewer-canvas:active { cursor: grabbing; }
+
+        /* Masni átfedés animáció */
+        #ribbon-overlay {
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
     </style>
 </head>
 <body class="font-sans antialiased selection:bg-rose-200 selection:text-rose-900 relative min-h-screen flex flex-col justify-between">
@@ -139,7 +145,7 @@
             </div>
         </nav>
 
-        <!-- KÖZÖS FELHŐ SZINKRONIZÁCIÓ PANEL -->
+        <!-- SZINKRONIZÁCIÓS PANEL -->
         <div id="sync-modal" class="hidden mt-2 glass-card rounded-3xl p-5 sm:p-6 shadow-xl border border-rose-200 text-xs sm:text-sm">
             <div class="flex items-center justify-between mb-3">
                 <h3 class="font-serif text-xl sm:text-2xl font-semibold text-rose-800 flex items-center gap-2">
@@ -155,7 +161,7 @@
                         <span id="cloud-badge" class="text-[11px] px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 font-medium">Nincs összekötve</span>
                     </div>
                     <p class="text-xs text-stone-500 leading-relaxed">
-                        Illeszd be ide a Google Firebase Realtime Database linkedet! Ha egyszer elmented, minden adventi ablak, recept, film és dátum <strong>azonnal szinkronizálódik mindkettőtöknél</strong>!
+                        Illeszd be ide a Google Firebase Realtime Database linkedet! Ha egyszer elmented, minden adventi ablaknyitás, film, recept és dátum <strong>azonnal szinkronizálódik mindkettőtöknél</strong>!
                     </p>
                     <div class="flex flex-col sm:flex-row gap-2">
                         <input type="url" id="firebase-url-input" placeholder="https://projekt-neve-default-rtdb.europe-west1.firebasedatabase.app" class="flex-1 px-3.5 py-2 rounded-xl border border-rose-200 bg-white text-stone-800 text-xs focus:outline-none focus:ring-2 focus:ring-rose-400">
@@ -279,36 +285,30 @@
             </div>
         </section>
 
-        <!-- 3. ADVENTI KALENDÁRIUM SZEKCIÓ -->
-        <section id="advent" class="scroll-mt-24">
-            <div class="glass-card rounded-3xl p-6 sm:p-10 shadow-soft">
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 border-b border-rose-100/80 pb-5">
-                    <div>
-                        <span class="text-xs uppercase tracking-widest text-rose-500 font-semibold block mb-1">December 1 - December 24 🎄🩷</span>
-                        <h2 class="font-serif text-3xl sm:text-4xl font-semibold text-stone-800">Közös Adventi Kalendáriumunk 🎁✨</h2>
-                    </div>
-                    <button type="button" onclick="toggleAdventEditor()" class="self-start sm:self-auto inline-flex items-center gap-2 px-4 py-2 rounded-full bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200/80 text-xs sm:text-sm font-medium transition shadow-sm">
-                        <span>✏️ Üzenetek szerkesztése</span>
-                    </button>
-                </div>
+        <!-- 3. ADVENTI KALENDÁRIUM SZEKCIÓ (12 NAPOS + PIROS MASNI ÁTFEDÉSSEL) -->
+        <section id="advent" class="scroll-mt-24 relative">
+            <div class="glass-card rounded-3xl p-6 sm:p-10 shadow-soft relative overflow-hidden">
+                
 
-                <p class="text-sm text-stone-600 mb-6 italic">
-                    Nyuszi, kattints a mai napra! 🤫🩷 (Ha még „valami készül”, azt is látni fogod!)
+                 <p class="text-sm text-stone-600 mb-6 italic">
+                    Nyuszi, kattints a mai napra! Először ki kell találnod a napi titkos jelszót (barkóba), hogy kinyíljon az ablak! 🤫🩷
                 </p>
 
-                <div id="advent-grid" class="grid grid-cols-4 sm:grid-cols-6 gap-3 sm:gap-4"></div>
+                <!-- 12-es kalendárium rács -->
+                <div id="advent-grid" class="grid grid-cols-3 sm:grid-cols-4 gap-3 sm:gap-4"></div>
 
-                <div id="advent-editor-panel" class="hidden mt-8 pt-6 border-t border-rose-200 bg-rose-50/60 p-5 rounded-2xl">
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3">
-                        <h3 class="font-serif text-xl font-semibold text-rose-800">Írd meg a napok üzeneteit, Nyuszi! 🩷</h3>
-                        <button type="button" onclick="fillAllAdventWithComingSoon()" class="px-3 py-1.5 rounded-xl bg-rose-200 hover:bg-rose-300 text-rose-900 text-xs font-semibold transition">
-                            🤫 Minden napra „Valami készül”
-                        </button>
-                    </div>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-80 overflow-y-auto p-1" id="advent-inputs-container"></div>
-                    <div class="mt-4 flex justify-end">
-                        <button type="button" onclick="saveAdventMessages()" class="px-5 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs sm:text-sm font-medium transition shadow-sm">
-                            💾 Adventi üzenetek mentése
+                <!-- PIROS MASNI ÁTFEDÉS (Overlay) -->
+                <div id="ribbon-overlay" class="absolute inset-0 bg-gradient-to-br from-rose-600 via-rose-700 to-red-800 rounded-3xl z-20 flex flex-col items-center justify-center text-center p-6 text-white shadow-2xl border-4 border-rose-400">
+                    <!-- Díszítő szalag minták -->
+                    <div class="absolute inset-x-0 top-1/2 -translate-y-1/2 h-16 bg-red-900/40 border-y-2 border-amber-300 pointer-events-none"></div>
+                    <div class="absolute inset-y-0 left-1/2 -translate-x-1/2 w-16 bg-red-900/40 border-x-2 border-amber-300 pointer-events-none"></div>
+
+                    <div class="relative z-10 space-y-4 max-w-xs">
+                        <div class="text-6xl animate-bounce">🎀</div>
+                        <h3 class="font-serif text-3xl font-bold tracking-wide text-amber-200 drop-shadow-md">Titkos Adventi Meglepetés</h3>
+                        <p class="text-xs sm:text-sm text-rose-100 font-medium">Csak Neked, Nyuszi! Fejtsd meg a jelszavakat napról napra!</p>
+                        <button type="button" onclick="openAdventRibbon()" class="px-6 py-3 rounded-full bg-amber-400 hover:bg-amber-300 text-stone-900 font-bold text-xs sm:text-sm transition-all shadow-lg active:scale-95 cursor-pointer">
+                            Megkötés kibontása 🎀
                         </button>
                     </div>
                 </div>
@@ -603,15 +603,31 @@
 
     </main>
 
-    <!-- ADVENTI MODAL -->
+    <!-- JELSZÓ KÉRŐ MODAL -->
+    <div id="password-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm hidden p-4">
+        <div class="glass-card bg-white rounded-3xl p-6 sm:p-8 max-w-sm w-full shadow-2xl border border-rose-300 relative text-center space-y-4">
+            <button type="button" onclick="closePasswordModal()" class="absolute top-4 right-4 text-stone-400 hover:text-stone-700 font-bold text-lg p-2">✕</button>
+            <div class="text-3xl">🔐</div>
+            <h3 id="password-modal-title" class="font-serif text-2xl font-bold text-rose-800">December X.</h3>
+            <p class="text-xs text-stone-600">A nyitáshoz add meg a napi titkos jelszót! 🤫🩷</p>
+            <input type="text" id="advent-guess-input" placeholder="Ide írd a jelszót..." class="w-full px-4 py-2.5 rounded-xl border border-rose-200 bg-white text-stone-800 text-sm text-center focus:outline-none focus:ring-2 focus:ring-rose-400">
+            <p id="password-error-msg" class="text-xs text-rose-600 font-medium hidden">Nem találod, Nyuszi! Próbáld újra! 🤭</p>
+            <div class="flex gap-2 pt-2">
+                <button type="button" onclick="closePasswordModal()" class="flex-1 px-4 py-2.5 rounded-xl border border-stone-200 bg-white text-stone-600 text-xs font-medium">Mégse</button>
+                <button type="button" onclick="checkAdventPassword()" class="flex-1 px-4 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold shadow-sm">Nyitás 🔓</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ADVENTI ÜZENET FELUGRÓ MODAL -->
     <div id="advent-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm hidden p-4">
-        <div class="glass-card bg-white rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl border border-rose-300 relative text-center space-y-4 animate-in fade-in zoom-in duration-200">
+        <div class="glass-card bg-white rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl border border-rose-300 relative text-center space-y-4">
             <button type="button" onclick="closeAdventModal()" class="absolute top-4 right-4 text-stone-400 hover:text-stone-700 font-bold text-lg p-2">✕</button>
-            <div id="advent-modal-icon" class="text-4xl">🤫</div>
+            <div id="advent-modal-icon" class="text-4xl">🎁</div>
             <h3 id="advent-modal-title" class="font-serif text-2xl font-bold text-rose-800">December X.</h3>
             <div id="advent-modal-content" class="text-stone-700 text-sm sm:text-base leading-relaxed bg-rose-50/70 p-4 rounded-2xl border border-rose-100 font-serif italic"></div>
             <button type="button" onclick="closeAdventModal()" class="px-6 py-2.5 rounded-full bg-rose-600 hover:bg-rose-700 text-white text-xs sm:text-sm font-medium transition shadow-sm">
-                Várom! 🩷
+                Köszönöm! 🩷
             </button>
         </div>
     </div>
@@ -621,7 +637,7 @@
         <p class="font-serif italic text-lg text-stone-700 mb-1">Nyuszinak 🩷🤭😍</p>
     </footer>
 
-    <!-- Visszajelző üzenet (Toast) -->
+    <!-- Toast -->
     <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
         <div class="bg-stone-800 text-white px-4 py-3 rounded-2xl shadow-lg flex items-center gap-2.5 text-xs sm:text-sm">
             <span>🩷</span>
@@ -630,6 +646,39 @@
     </div>
 
     <script>
+        // ============================================================================
+        // 🎄 ADVENTI ÜZENETEK ÉS JELSZAVAK (Itt tudod szerkeszteni a kódban!)
+        // ============================================================================
+        const adventMessages = {
+            1: "Drága Nyuszi! Az első napra egy cuki ölelés küldök neked! 🧸🩷",
+            2: "Valami készül... 🤫🩷",
+            3: "Valami készül... 🤫🩷",
+            4: "Valami készül... 🤫🩷",
+            5: "Valami készül... 🤫🩷",
+            6: "Valami készül... 🤫🩷",
+            7: "Valami készül... 🤫🩷",
+            8: "Valami készül... 🤫🩷",
+            9: "Valami készül... 🤫🩷",
+            10: "Valami készül... 🤫🩷",
+            11: "Valami készül... 🤫🩷",
+            12: "Boldog Karácsonyt, Nyuszi! Alig várom, hogy együtt legyünk! 😍🎄🩷"
+        };
+
+        const adventPasswords = {
+            1: "szeretet",
+            2: "nyuszi",
+            3: "velence",
+            4: "csillag",
+            5: "szerelem",
+            6: "mikulás",
+            7: "ölelés",
+            8: "puszi",
+            9: "cuki",
+            10: "kávé",
+            11: "tél",
+            12: "karácsony"
+        };
+
         const DEFAULT_FIREBASE_URL = "";
 
         function refreshIcons() {
@@ -713,7 +762,7 @@
                 moviesList: moviesList,
                 travelList: travelList,
                 recipesList: recipesList,
-                adventData: adventData
+                adventOpened: adventOpened
             };
 
             try {
@@ -754,9 +803,9 @@
                     recipesList = data.recipesList;
                     safeSetItem(STORAGE_RECIPES_KEY, JSON.stringify(recipesList));
                 }
-                if (data.adventData && typeof data.adventData === 'object') {
-                    adventData = data.adventData;
-                    safeSetItem(STORAGE_ADVENT_KEY, JSON.stringify(adventData));
+                if (data.adventOpened && typeof data.adventOpened === 'object') {
+                    adventOpened = data.adventOpened;
+                    safeSetItem(STORAGE_ADVENT_OPENED_KEY, JSON.stringify(adventOpened));
                 }
 
                 updateCountdownDisplay();
@@ -837,7 +886,7 @@
                     moviesList: moviesList,
                     travelList: travelList,
                     recipesList: recipesList,
-                    adventData: adventData
+                    adventOpened: adventOpened
                 };
                 const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(snapshot))));
                 const baseUrl = window.location.href.split('?')[0];
@@ -851,65 +900,81 @@
             }
         }
 
-        // --- 1. ADVENTI KALENDÁRIUM LOGIKA ('Valami készül' alapértelmezéssel) ---
-        const STORAGE_ADVENT_KEY = 'nyuszi_advent_messages_v2';
-        
-        const defaultAdventMessages = {};
-        const defaultAdventOpened = {};
-        for (let i = 1; i <= 24; i++) {
-            defaultAdventMessages[i] = "Valami készül... 🤫🩷";
-            defaultAdventOpened[i] = false;
+        // --- 1. 12 NAPOS ADVENTI KALENDÁRIUM LOGIKA ---
+        const STORAGE_ADVENT_OPENED_KEY = 'nyuszi_advent_opened_v1';
+        let adventOpened = safeGetJSON(STORAGE_ADVENT_OPENED_KEY, {});
+
+        function saveAdventOpened() {
+            safeSetItem(STORAGE_ADVENT_OPENED_KEY, JSON.stringify(adventOpened));
+            pushAllStateToCloud();
         }
 
-        let adventData = safeGetJSON(STORAGE_ADVENT_KEY, {
-            messages: defaultAdventMessages,
-            opened: defaultAdventOpened
-        });
-        if (!adventData.messages) adventData.messages = defaultAdventMessages;
-        if (!adventData.opened) adventData.opened = defaultAdventOpened;
-
-        function saveAdventToStorage() {
-            safeSetItem(STORAGE_ADVENT_KEY, JSON.stringify(adventData));
-            pushAllStateToCloud();
+        function openAdventRibbon() {
+            const overlay = document.getElementById('ribbon-overlay');
+            if (overlay) {
+                overlay.style.opacity = '0';
+                overlay.style.transform = 'scale(1.05)';
+                setTimeout(() => overlay.remove(), 600);
+            }
         }
 
         function renderAdventCalendar() {
             const grid = document.getElementById('advent-grid');
-            const inputsContainer = document.getElementById('advent-inputs-container');
             if (!grid) return;
 
             let gridHtml = '';
-            let inputsHtml = '';
-
-            for (let i = 1; i <= 24; i++) {
-                const isOpened = adventData.opened[i];
-                
+            for (let i = 1; i <= 12; i++) {
+                const isOpened = adventOpened[i];
                 gridHtml += `
-                    <button type="button" onclick="openAdventDay(${i})" class="aspect-square rounded-2xl p-2 flex flex-col items-center justify-center transition-all shadow-sm border font-serif text-lg font-bold relative overflow-hidden group ${isOpened ? 'bg-rose-50 border-rose-300 text-rose-800' : 'bg-gradient-to-br from-rose-500 to-rose-600 hover:from-rose-600 hover:to-rose-700 border-rose-400 text-white shadow-md hover:scale-105'}">
+                    <button type="button" onclick="clickAdventDay(${i})" class="aspect-square rounded-2xl p-2 flex flex-col items-center justify-center transition-all shadow-sm border font-serif text-lg font-bold relative overflow-hidden group ${isOpened ? 'bg-rose-50 border-rose-300 text-rose-800' : 'bg-gradient-to-br from-rose-500 to-rose-600 hover:from-rose-600 hover:to-rose-700 border-rose-400 text-white shadow-md hover:scale-105'}">
                         <span class="text-xs uppercase tracking-wider opacity-80 font-sans">Nap</span>
                         <span class="text-2xl sm:text-3xl">${i}</span>
-                        <span class="absolute bottom-1 text-[10px] opacity-75">${isOpened ? 'Nyitva 🩷' : 'Kattints 🎁'}</span>
+                        <span class="absolute bottom-1 text-[10px] opacity-75">${isOpened ? 'Nyitva 🩷' : '🔐 Jelszó'}</span>
                     </button>
                 `;
-
-                inputsHtml += `
-                    <div class="bg-white p-3 rounded-xl border border-rose-200 space-y-1">
-                        <label class="block text-xs font-semibold text-rose-800">December ${i}. napi üzenet:</label>
-                        <textarea id="advent-msg-${i}" rows="2" class="w-full px-2.5 py-1.5 rounded-lg border border-rose-200 text-xs text-stone-800 focus:outline-none focus:ring-1 focus:ring-rose-400">${escapeHtml(adventData.messages[i] || '')}</textarea>
-                    </div>
-                `;
             }
-
             grid.innerHTML = gridHtml;
-            if (inputsContainer) inputsContainer.innerHTML = inputsHtml;
         }
 
-        function openAdventDay(day) {
-            const msg = adventData.messages[day] || "Valami készül... 🤫🩷";
-            adventData.opened[day] = true;
-            saveAdventToStorage();
-            renderAdventCalendar();
+        let activeAttemptDay = null;
 
+        function clickAdventDay(day) {
+            if (adventOpened[day]) {
+                showAdventMessageModal(day);
+                return;
+            }
+            activeAttemptDay = day;
+            document.getElementById('password-modal-title').textContent = `December ${day}. 🔐`;
+            document.getElementById('advent-guess-input').value = '';
+            document.getElementById('password-error-msg').classList.add('hidden');
+            document.getElementById('password-modal').classList.remove('hidden');
+            document.getElementById('advent-guess-input').focus();
+        }
+
+        function checkAdventPassword() {
+            if (activeAttemptDay === null) return;
+            const guess = document.getElementById('advent-guess-input').value.trim().toLowerCase();
+            const correctPwd = (adventPasswords[activeAttemptDay] || "szeretet").trim().toLowerCase();
+
+            if (guess === correctPwd) {
+                document.getElementById('password-modal').classList.add('hidden');
+                adventOpened[activeAttemptDay] = true;
+                saveAdventOpened();
+                renderAdventCalendar();
+                showAdventMessageModal(activeAttemptDay);
+                showToast("Helyes jelszó! Ablak kinyitva! 🔓🩷");
+            } else {
+                document.getElementById('password-error-msg').classList.remove('hidden');
+            }
+        }
+
+        function closePasswordModal() {
+            document.getElementById('password-modal').classList.add('hidden');
+            activeAttemptDay = null;
+        }
+
+        function showAdventMessageModal(day) {
+            const msg = adventMessages[day] || "Valami készül... 🤫🩷";
             document.getElementById('advent-modal-title').textContent = `December ${day}. 🎄`;
             document.getElementById('advent-modal-content').textContent = `„${msg}”`;
             document.getElementById('advent-modal').classList.remove('hidden');
@@ -917,31 +982,6 @@
 
         function closeAdventModal() {
             document.getElementById('advent-modal').classList.add('hidden');
-        }
-
-        function toggleAdventEditor() {
-            const panel = document.getElementById('advent-editor-panel');
-            if (panel) panel.classList.toggle('hidden');
-        }
-
-        function fillAllAdventWithComingSoon() {
-            for (let i = 1; i <= 24; i++) {
-                const ta = document.getElementById(`advent-msg-${i}`);
-                if (ta) ta.value = "Valami készül... 🤫🩷";
-            }
-            showToast("Minden napra bekerült: Valami készül! 🤫");
-        }
-
-        function saveAdventMessages() {
-            for (let i = 1; i <= 24; i++) {
-                const textarea = document.getElementById(`advent-msg-${i}`);
-                if (textarea) {
-                    adventData.messages[i] = textarea.value.trim();
-                }
-            }
-            saveAdventToStorage();
-            toggleAdventEditor();
-            showToast("Adventi üzenetek sikeresen elmentve! 🎁🩷");
         }
 
         // --- 2. VISSZASZÁMLÁLÓ ---
