@@ -652,7 +652,7 @@
         // 🎄 12 NAPOS ADVENTI ÜZENETEK ÉS JELSZAVAK (Itt tudod átírni őket!)
         // ============================================================================
         const adventMessages = {
-            1: "titok 🧸🩷",
+            1: "Drága Nyuszi! Az első napra egy cuki ölelés küldök neked! 🧸🩷",
             2: "Valami készül... 🤫🩷",
             3: "Valami készül... 🤫🩷",
             4: "Valami készül... 🤫🩷",
@@ -667,7 +667,7 @@
         };
 
         const adventPasswords = {
-            1: "hógömb",
+            1: "szeretet",
             2: "nyuszi",
             3: "velence",
             4: "csillag",
@@ -902,8 +902,8 @@
             }
         }
 
-        // --- 1. 12 NAPOS ADVENTI KALENDÁRIUM LOGIKA (Minden ablak zárva indul) ---
-        const STORAGE_ADVENT_OPENED_KEY = 'nyuszi_advent_opened_v3';
+        // --- 1. 12 NAPOS ADVENTI KALENDÁRIUM LOGIKA ---
+        const STORAGE_ADVENT_OPENED_KEY = 'nyuszi_advent_opened_v4';
         let adventOpened = safeGetJSON(STORAGE_ADVENT_OPENED_KEY, {});
 
         function saveAdventOpened() {
@@ -1265,6 +1265,30 @@
             `).join('');
         }
 
+        // --- 6. HÁTTÉR SZIRMOK ÉS EMOJIK ---
+        function createFloatingPetals(count = 16) {
+            const container = document.getElementById('petals-container');
+            if (!container) return;
+            container.innerHTML = '';
+            const symbols = ['🩷', '🦉', '🤭', '😍', '🌸', '🩷'];
+
+            for (let i = 0; i < count; i++) {
+                const petal = document.createElement('div');
+                petal.className = 'petal';
+                petal.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+                petal.style.left = `${Math.random() * 100}vw`;
+                petal.style.fontSize = `${Math.random() * 10 + 13}px`;
+                petal.style.animationDuration = `${Math.random() * 12 + 13}s`;
+                petal.style.animationDelay = `${Math.random() * 10}s`;
+                container.appendChild(petal);
+            }
+        }
+
+        function triggerPetalShower() {
+            createFloatingPetals(8);
+            showToast("Egy csokor ölelés Nyuszinak! 🩷😍");
+        }
+
         // --- TOAST ÉS INDÍTÁS ---
         function showToast(msg) {
             const toast = document.getElementById('toast');
@@ -1281,7 +1305,7 @@
             try { initPosterTiltAndFallback(); } catch (e) {}
             try { initSky360(); } catch (e) {}
             try { initCloudSync(); } catch (e) {}
-            try { createFloatingPetals(16); } catch (e) {} // <-- EZ INDÍTJA ÚJRA A SZIRMOKAT ÉS EMOJIKAT!
+            try { createFloatingPetals(16); } catch (e) {}
             refreshIcons();
         }
 
